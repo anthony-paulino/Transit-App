@@ -1,7 +1,3 @@
-It looks like you have a comprehensive README structure already! Here's how you can update it to reflect the recent schema and implementation changes, particularly around segment handling and other new functionalities.
-
----
-
 # Transit Web App
 
 ## Project Overview
