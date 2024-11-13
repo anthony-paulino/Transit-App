@@ -6,6 +6,8 @@
        response.sendRedirect("login.jsp"); // Redirect to login if not a customer
        return;
    }
+   
+   SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
 
    // DAOs
    StationDAO stationDAO = new StationDAO();
@@ -124,8 +126,8 @@
                                    <td><%= schedule.getTrainID() %></td>
                                    <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
                                    <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
-                                   <td><%= schedule.getDepartureDateTime() %></td>
-                                   <td><%= schedule.getArrivalDateTime() %></td>
+                                   <td><%= formatter.format(schedule.getDepartureDateTime()) %></td>
+                                   <td><%= formatter.format(schedule.getArrivalDateTime()) %></td>
                                    <td><%= schedule.getFare() %></td>
                                    <td><%= schedule.getTravelTime() %> mins</td>
                                </tr>
