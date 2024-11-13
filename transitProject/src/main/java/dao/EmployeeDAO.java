@@ -1,5 +1,6 @@
 package dao;
 
+//This is for customer-Rep and Manager DAOs
 import model.Employee;
 import transit.DatabaseConnection;
 
