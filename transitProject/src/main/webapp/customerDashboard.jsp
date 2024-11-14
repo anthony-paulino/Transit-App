@@ -135,7 +135,9 @@
 					                <td>
 					                    <form action="scheduleDetails.jsp" method="get" style="display:inline;">
 					                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
-					                        <button type="submit" Open class="open-button"> </button>
+                                			<input type="hidden" name="originID" value="<%= schedule.getOriginID() %>">
+                                			<input type="hidden" name="destinationID" value="<%= schedule.getDestinationID() %>">
+					                        <button type="submit" class="open-button"> Open </button>
 					                    </form>
 					                </td>
 					            </tr>
