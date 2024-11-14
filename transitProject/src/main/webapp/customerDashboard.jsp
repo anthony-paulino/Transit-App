@@ -106,33 +106,41 @@
                <% if (schedules.isEmpty()) { %>
                    <p>No schedules found for the selected criteria.</p>
                <% } else { %>
-					<table>
-					   <thead>
-					       <tr>
-					           <th>Transit Line</th>
-					           <th>Train</th>
-					           <th>Origin</th>
-					           <th>Destination</th>
-					           <th>Departure</th>
-					           <th>Arrival</th>
-					           <th>Fare</th>
-					           <th>Travel Time</th>
-					       </tr>
-					   </thead>
-					   <tbody>
-					       <% for (TrainSchedule schedule : schedules) { %>
-					           <tr>
-					               <td><%= transitLineDAO.getTransitLineName(schedule.getTransitID()) %></td>
-					               <td><a href="scheduleDetails.jsp?scheduleID=<%= schedule.getScheduleID() %>"><%= schedule.getTrainID() %></a></td>
-					               <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
-					               <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
-					               <td><%= formatter.format(schedule.getDepartureDateTime()) %></td>
-					               <td><%= formatter.format(schedule.getArrivalDateTime()) %></td>
-					               <td><%= "$" + (Math.round(schedule.getFare() * 100.0) / 100.0) %></td>
-					               <td><%= schedule.getTravelTime() %> mins</td>
-					           </tr>
-					       <% } %>
-					   </tbody>
+					<table> 
+					    <thead>
+					        <tr>
+					            <th>Transit Line</th>
+					            <th>Train</th>
+					            <th>Origin</th>
+					            <th>Destination</th>
+					            <th>Departure</th>
+					            <th>Arrival</th>
+					            <th>Fare</th>
+					            <th>Travel Time</th>
+					            <th>Details</th> <!-- Added a new column for the Open button -->
+					        </tr>
+					    </thead>
+					    <tbody>
+					        <% for (TrainSchedule schedule : schedules) { %>
+					            <tr>
+					                <td><%= transitLineDAO.getTransitLineName(schedule.getTransitID()) %></td>
+					                <td><%= schedule.getTrainID() %></td>
+					                <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
+					                <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
+					                <td><%= formatter.format(schedule.getDepartureDateTime()) %></td>
+					                <td><%= formatter.format(schedule.getArrivalDateTime()) %></td>
+					                <td><%= "$" + (Math.round(schedule.getFare() * 100.0) / 100.0) %></td>
+					                <td><%= schedule.getTravelTime() %> mins</td>
+					                <!-- Form to open schedule details -->
+					                <td>
+					                    <form action="scheduleDetails.jsp" method="get">
+					                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
+					                        <button type="submit">Open</button>
+					                    </form>
+					                </td>
+					            </tr>
+					        <% } %>
+					    </tbody>
 					</table>
                <% } %>
            </div>

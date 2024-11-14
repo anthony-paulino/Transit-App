@@ -176,7 +176,8 @@ body {
 }
 
 /* Button styling for form */
-.search-form button {
+.search-form button,
+.results table .open-button { /* Styled the Open button similarly to search */
     background-color: #4CAF50;
     color: #fff;
     padding: 10px 20px;
@@ -188,10 +189,57 @@ body {
     margin-top: 10px;
 }
 
-.search-form button:hover {
+.search-form button:hover,
+.results table .open-button:hover {
     background-color: #45a049;
 }
 
+/* Schedule Details Page styling */
+.schedule-details-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.schedule-details-container h2 {
+    color: #333;
+    font-size: 1.8em;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.schedule-details-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.schedule-details-container table th,
+.schedule-details-container table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.schedule-details-container table th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.schedule-details-container table td {
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+.schedule-details-container table tr:nth-child(even) td {
+    background-color: #f3f3f3;
+}
 
 
 
