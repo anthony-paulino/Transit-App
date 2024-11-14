@@ -133,9 +133,9 @@
 					                <td><%= schedule.getTravelTime() %> mins</td>
 					                <!-- Form to open schedule details -->
 					                <td>
-					                    <form action="scheduleDetails.jsp" method="get">
+					                    <form action="scheduleDetails.jsp" method="get" style="display:inline;">
 					                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
-					                        <button type="submit">Open</button>
+					                        <button type="submit" Open class="open-button"> </button>
 					                    </form>
 					                </td>
 					            </tr>

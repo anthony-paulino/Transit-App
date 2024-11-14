@@ -31,7 +31,7 @@
        <div class="navbar">
            <a href="customerDashboard.jsp">Back to Dashboard</a>
        </div>
-       <div class="content">
+       <div class="schedule-details-container">
            <h2>Schedule Overview</h2>
            <p>Below is the overview of stops for this route:</p>
            <table>

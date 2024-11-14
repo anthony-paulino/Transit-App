@@ -26,50 +26,7 @@ body {
     text-align: center;
 }
 
-.form-container h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.form-container label {
-    display: block;
-    margin: 10px 0 5px;
-    text-align: left;
-    color: #555;
-}
-
-.form-container input[type="text"],
-.form-container input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-}
-
-.form-container button {
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1em;
-}
-
-.form-container button:hover {
-    background-color: #45a049;
-}
-
-.form-container .error {
-    color: #d9534f;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-}
-
-/* Navbar styling for dashboard */
+/* Navbar styling */
 .navbar {
     background-color: #333;
     color: #ffffff;
@@ -96,19 +53,6 @@ body {
 
 .navbar a:hover {
     background-color: #555;
-}
-
-.navbar .left, .navbar .right {
-    display: flex;
-    align-items: center;
-}
-
-.navbar .left a {
-    margin-right: 10px;
-}
-
-.navbar .right a {
-    margin-left: 10px;
 }
 
 /* Dashboard container */
@@ -175,7 +119,7 @@ body {
     font-weight: 600;
 }
 
-/* Button styling for form */
+/* Button styling for form and open button */
 .search-form button,
 .results table .open-button { /* Styled the Open button similarly to search */
     background-color: #4CAF50;
@@ -240,6 +184,5 @@ body {
 .schedule-details-container table tr:nth-child(even) td {
     background-color: #f3f3f3;
 }
-
 
 
