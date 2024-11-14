@@ -228,4 +228,87 @@ body {
     background-color: #f3f3f3;
 }
 
+.fare-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
 
+.fare-label {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Reservation heading */
+.reservation-details-container h2 {
+    color: #333;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Table styling for reservation details */
+.reservation-details-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.reservation-details-container table th, 
+.reservation-details-container table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.reservation-details-container table th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.reservation-details-container table td {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Stripe effect for rows */
+.reservation-details-container table tr:nth-child(even) td {
+    background-color: #f3f3f3;
+}
+
+/* Make Reservation Button */
+.confirm-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+}
+
+.confirm-button:hover {
+    background-color: #45a049;
+}
+
+/* Adjustments for drop down and input fields */
+.reservation-details-container select, 
+.reservation-details-container input[type="number"] {
+    width: 80%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}

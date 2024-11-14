@@ -137,6 +137,7 @@
 					                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
                                 			<input type="hidden" name="originID" value="<%= schedule.getOriginID() %>">
                                 			<input type="hidden" name="destinationID" value="<%= schedule.getDestinationID() %>">
+                                			<input type="hidden" name="baseFare" value="<%= (Math.round(schedule.getFare() * 100.0) / 100.0) %>"> <!-- Passing base fare -->
 					                        <button type="submit" class="open-button"> Open </button>
 					                    </form>
 					                </td>

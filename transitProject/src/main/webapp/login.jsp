@@ -40,10 +40,12 @@
 
            if (customer != null) {
                session.setAttribute("user", customer);
+               session.setAttribute("username", username);
                session.setAttribute("role", "customer");
                response.sendRedirect("customerDashboard.jsp");
            } else if (employee != null) {
                session.setAttribute("user", employee);
+               session.setAttribute("username", username);
                session.setAttribute("role", employee.isAdmin() ? "manager" : "rep");
                response.sendRedirect(employee.isAdmin() ? "managerDashboard.jsp" : "repDashboard.jsp");
            } else {

@@ -4,8 +4,9 @@
    String scheduleIDParam = request.getParameter("scheduleID");
    String originIDParam = request.getParameter("originID");
    String destinationIDParam = request.getParameter("destinationID");
+   String baseFareParam = request.getParameter("baseFare");
 
-   if (scheduleIDParam == null || originIDParam == null || destinationIDParam == null) {
+   if (scheduleIDParam == null || originIDParam == null || destinationIDParam == null || baseFareParam == null) {
        response.sendRedirect("customerDashboard.jsp");
        return;
    }
@@ -13,6 +14,7 @@
    int scheduleID = Integer.parseInt(scheduleIDParam);
    int originID = Integer.parseInt(originIDParam);
    int destinationID = Integer.parseInt(destinationIDParam);
+   float baseFare = Float.parseFloat(baseFareParam);
 
    // DAOs
    TrainScheduleDAO scheduleDAO = new TrainScheduleDAO();
@@ -72,6 +74,17 @@
                    <% } %>
                </tbody>
            </table>
+          <!-- Fare and Make Reservation button -->
+           <div class="fare-container">
+               <p class="fare-label">Base Fare: $<%= baseFare %></p>
+               <form action="reservationDetails.jsp" method="get">
+                   <input type="hidden" name="scheduleID" value="<%= scheduleID %>">
+                   <input type="hidden" name="originID" value="<%= originID %>">
+                   <input type="hidden" name="destinationID" value="<%= destinationID %>">
+                   <input type="hidden" name="baseFare" value="<%= baseFare %>">
+                   <button type="submit" class="confirm-button">Make Reservation(s)</button>
+               </form>
+           </div>
        </div>
    </div>
 </body>

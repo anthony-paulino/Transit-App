@@ -31,6 +31,28 @@ public class CustomerDAO {
        }
        return null;
    }
+   
+   public Customer getCustomerByUsername(String username) {
+	    String query = "SELECT * FROM Customers WHERE username = ?";
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(query)) {
+	        ps.setString(1, username);
+	        ResultSet rs = ps.executeQuery();
+	        if (rs.next()) {
+	            return new Customer(
+	                rs.getInt("customerID"),
+	                rs.getString("username"),
+	                rs.getString("password"),
+	                rs.getString("emailAddress"),
+	                rs.getString("firstName"),
+	                rs.getString("lastName")
+	            );
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 
    public boolean addCustomer(Customer customer) {
        String query = "INSERT INTO Customers (username, password, emailAddress, firstName, lastName) VALUES (?, ?, ?, ?, ?)";
