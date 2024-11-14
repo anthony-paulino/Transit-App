@@ -38,7 +38,7 @@
    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-   <div class="dashboard-container">
+   <div class="customer-schedule-container">
        <div class="navbar">
            <a href="customerDashboard.jsp">Back to Dashboard</a>
        </div>

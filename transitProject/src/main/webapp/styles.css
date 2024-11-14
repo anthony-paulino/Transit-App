@@ -100,20 +100,33 @@ body {
 
 /* Dashboard container */
 .dashboard-container {
-    margin-top: 100px; /* Offset for fixed navbar */
+    margin-top: 100px;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 90%;
-    max-width: 1200px;
+    width: 80%;
+    max-width: 600px;
     text-align: center;
     transition: all 0.3s ease;
 }
 
-/* Dashboard container */
+/* Customer Service container */
+.dashboard-container {
+    margin-top: 100px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Customer Schedule container */
 .customer-schedule-container {
-    margin-top: 100px; /* Offset for fixed navbar */
+    margin-top: 100px;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 10px;
