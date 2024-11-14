@@ -1,12 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Manage Reservations</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-
+    <div class="dashboard-container">
+        <div class="navbar">
+            <a href="customerDashboard.jsp">Back to Dashboard</a>
+        </div>
+        <div class="content">
+            <h2>Manage Reservations</h2>
+            <p>This feature will allow you to view, manage, and cancel your reservations.</p>
+        </div>
+    </div>
 </body>
 </html>

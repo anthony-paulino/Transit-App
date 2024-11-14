@@ -70,11 +70,15 @@ CREATE TABLE IF NOT EXISTS Reservations (
     customerID INT,
     originID INT,
     destinationID INT,
+    ticketType ENUM('adult', 'child', 'senior', 'disabled') NOT NULL,  
+    tripType ENUM('oneWay', 'roundTrip') NOT NULL,                   
+    fare DECIMAL(10, 2) NOT NULL,                                      
     FOREIGN KEY (scheduleID) REFERENCES Train_Schedules(scheduleID),
     FOREIGN KEY (customerID) REFERENCES Customers(customerID),
     FOREIGN KEY (originID) REFERENCES Stations(stationID),
     FOREIGN KEY (destinationID) REFERENCES Stations(stationID)
 );
+
 
 -- Stops_At Table
 CREATE TABLE IF NOT EXISTS Stops_At (
@@ -165,17 +169,12 @@ INSERT INTO Stops_At (scheduleID, stationID, stopNumber, arrivalDateTime, depart
 (1003, 6, 6, '2024-11-13 07:30:00', NULL); -- Route ends
 
 -- Reservations
-INSERT INTO Reservations (reservationNumber, dateMade, scheduleID, customerID) VALUES
-(1, '2024-11-10', 1001, 1), -- John Doe reservation for Northeast Corridor full route
-(2, '2024-11-10', 1002, 2), -- Jane Smith reservation for Atlantic City Line full route
-(3, '2024-11-10', 1003, 3), -- Mark Johnson reservation for North Jersey Coast Line full route
-(4, '2024-11-11', 1001, 2), -- Jane Smith reservation for Northeast Corridor full route
-(5, '2024-11-11', 1003, 1); -- John Doe reservation for North Jersey Coast Line full route
+INSERT INTO Reservations (reservationNumber, dateMade, scheduleID, originID, destinationID, customerID, ticketType, tripType, fare) VALUES
+(1, '2024-11-10', 1001, 1, 7, 1, 'adult', 'roundTrip', '100.00'), -- John Doe reservation for Northeast Corridor full route
+(2, '2024-11-10', 1002, 2, 6, 2, 'adult', 'roundTrip', '60.00'); -- Jane Smith reservation for Atlantic City Line full route
+
 
 -- Handles - Linking reservations with employees
 INSERT INTO Handles (employeeID, reservationNumber) VALUES
 (1, 1), -- Employee Alice Johnson handles reservation 1
-(1, 2), -- Employee Alice Johnson handles reservation 2
-(2, 3), -- Employee Bob Brown handles reservation 3
-(2, 4), -- Employee Bob Brown handles reservation 4
-(1, 5); -- Employee Alice Johnson handles reservation 5
+(1, 2); -- Employee Alice Johnson handles reservation 2

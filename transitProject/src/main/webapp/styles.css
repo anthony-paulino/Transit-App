@@ -111,6 +111,39 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Dashboard container */
+.customer-schedule-container {
+    margin-top: 100px; /* Offset for fixed navbar */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 1200px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Style for long navigation buttons in dashboard */
+.long-button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 20px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    max-width: 500px;
+    transition: background-color 0.3s;
+}
+
+.long-button:hover {
+    background-color: #45a049;
+}
+
 /* Modernized styling within the dashboard content */
 .content h2 {
     color: #333;
