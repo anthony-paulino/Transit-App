@@ -233,9 +233,9 @@ body {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 80%;
-    max-width: 800px;
-    margin-top: 20px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
 }
 
 .schedule-details-container h2 {
@@ -245,46 +245,89 @@ body {
     margin-bottom: 20px;
 }
 
-.schedule-details-container table {
+.schedule-overview {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+    margin: 10px 1%;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-overview h3 {
+    color: #333;
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.schedule-overview table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
 
-.schedule-details-container table th,
-.schedule-details-container table td {
-    padding: 15px;
+.schedule-overview table th,
+.schedule-overview table td {
+    padding: 12px;
     border: 1px solid #e0e0e0;
     text-align: left;
 }
 
-.schedule-details-container table th {
+.schedule-overview table th {
     background-color: #333;
     color: #ffffff;
     font-weight: 600;
     text-transform: uppercase;
 }
 
-.schedule-details-container table td {
+.schedule-overview table td {
     color: #333;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
 }
 
-.schedule-details-container table tr:nth-child(even) td {
+.schedule-overview table tr:nth-child(even) td {
     background-color: #f3f3f3;
 }
 
+.round-trip-container {
+    width: 100%;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.round-trip-container label {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+}
+
+.round-trip-container select {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 220px;
+}
+
+.return-schedule-details {
+    display: none;
+    margin-top: 10px;
+}
+
 .fare-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;
+    text-align: center;
     margin-top: 20px;
 }
 
 .fare-label {
     font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 600;
     color: #333;
+    margin-bottom: 10px;
 }
 
 /* Reservation heading */
