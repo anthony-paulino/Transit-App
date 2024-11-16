@@ -9,15 +9,22 @@
     }
 
     // Retrieve schedule details passed from scheduleDetails.jsp
-    String scheduleIDParam = request.getParameter("scheduleID");
+    String inScheduleIDParam = request.getParameter("incomingScheduleID");
+    String reScheduleIDParam = request.getParameter("returningScheduleID");
     String originIDParam = request.getParameter("originID");
     String destinationIDParam = request.getParameter("destinationID");
     String baseFareParam = request.getParameter("baseFare");
-    
-    int scheduleID = Integer.parseInt(scheduleIDParam);
+    String hasRoundTripAvailable = request.getParameter("hasRoundTripAvailable");
+
+    int incomingScheduleID = Integer.parseInt(inScheduleIDParam);
+    int returningScheduleID = -1;
+    if (reScheduleIDParam != null && !reScheduleIDParam.isEmpty()) {
+    	returningScheduleID = Integer.parseInt(reScheduleIDParam);
+    }
     int originID = Integer.parseInt(originIDParam);
     int destinationID = Integer.parseInt(destinationIDParam);
     float baseFare = Float.parseFloat(baseFareParam);
+    boolean roundTripAvailable = Boolean.parseBoolean(hasRoundTripAvailable);
 %>
 
 <!DOCTYPE html>
@@ -55,86 +62,105 @@
             });
 				
             // Update the total display
-            document.getElementById("totalAmount").textContent = "$"+(total.toFixed(2)).toString();
+            document.getElementById("totalAmount").textContent = "$" + total.toFixed(2);
         }
+
+        // Function to lock trip types to "One-Way" if no round trips are available
+        function lockTripType() {
+            const roundTripAvailable = <%= roundTripAvailable %>;
+
+            if (!roundTripAvailable) {
+                // Loop through each trip type dropdown and disable or hide the "Round Trip" option
+                const tripTypes = ["adultTripType", "childTripType", "seniorTripType", "disabledTripType"];
+                tripTypes.forEach(id => {
+                    const select = document.getElementById(id);
+                    select.querySelectorAll('option[value="roundTrip"]').forEach(option => {
+                        option.disabled = true; // or use option.style.display = "none" to hide it
+                    });
+                });
+            }
+        }
+
+        window.onload = lockTripType;
     </script>
 </head>
 <body>
-	<div class="dashboard-container">
-       <div class="navbar">
-           <a href="customerDashboard.jsp">Back to Dashboard</a>
-       </div>
-	    <div class="reservation-details-container">
-	        <h2>Reservation Details</h2>
-	        <p>Each ticket counts as one reservation</p>
-	        <p>Fare per one-way adult ticket: $<%= baseFare %></p>
-	        
-	        <form action="processReservation.jsp" method="post">
-	            <input type="hidden" name="scheduleID" value="<%= scheduleID %>">
-	            <input type="hidden" name="originID" value="<%= originID %>">
-	            <input type="hidden" name="destinationID" value="<%= destinationID %>">
-	            <input type="hidden" name="baseFare" value="<%= baseFare %>">
-	            
-	            <table>
-	                <thead>
-	                    <tr>
-	                        <th>Ticket Type</th>
-	                        <th>Quantity</th>
-	                        <th>Trip Type</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <tr>
-	                        <td>Adult</td>
-	                        <td><input type="number" id="adultTickets" name="adultTickets" min="0" value="0" onchange="calculateTotal()"></td>
-	                        <td>
-	                            <select id="adultTripType" name="adultTripType" onchange="calculateTotal()">
-	                                <option value="oneWay">One-Way</option>
-	                                <option value="roundTrip">Round Trip</option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	                    <tr>
-	                        <td>Child (25% Discount)</td>
-	                        <td><input type="number" id="childTickets" name="childTickets" min="0" value="0" onchange="calculateTotal()"></td>
-	                        <td>
-	                            <select id="childTripType" name="childTripType" onchange="calculateTotal()">
-	                                <option value="oneWay">One-Way</option>
-	                                <option value="roundTrip">Round Trip</option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	                    <tr>
-	                        <td>Senior (35% Discount)</td>
-	                        <td><input type="number" id="seniorTickets" name="seniorTickets" min="0" value="0" onchange="calculateTotal()"></td>
-	                        <td>
-	                            <select id="seniorTripType" name="seniorTripType" onchange="calculateTotal()">
-	                                <option value="oneWay">One-Way</option>
-	                                <option value="roundTrip">Round Trip</option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	                    <tr>
-	                        <td>Disabled (50% Discount)</td>
-	                        <td><input type="number" id="disabledTickets" name="disabledTickets" min="0" value="0" onchange="calculateTotal()"></td>
-	                        <td>
-	                            <select id="disabledTripType" name="disabledTripType" onchange="calculateTotal()">
-	                                <option value="oneWay">One-Way</option>
-	                                <option value="roundTrip">Round Trip</option>
-	                            </select>
-	                        </td>
-	                    </tr>
-	                </tbody>
-	            </table>
-	
-	            <!-- Display Total Amount -->
-	            <div class="fare-container">
-	                <span class="fare-label">Total Amount: <span id="totalAmount">$0.00</span></span>
-	            </div>
-	
-	            <button type="submit" class="confirm-button">Confirm Reservation</button>
-	        </form>
-	    </div>
-    	</div>
+    <div class="dashboard-container">
+        <div class="navbar">
+            <a href="customerDashboard.jsp">Back to Dashboard</a>
+        </div>
+        <div class="reservation-details-container">
+            <h2>Reservation Details</h2>
+            <p>Each ticket counts as one reservation</p>
+            <p>Fare per one-way adult ticket: $<%= baseFare %></p>
+            
+            <form action="processReservation.jsp" method="post">
+                <input type="hidden" name="incomingScheduleID" value="<%= incomingScheduleID %>">
+                <input type="hidden" name="returningScheduleID" value="<%= returningScheduleID %>">
+                <input type="hidden" name="hasRoundTripAvailable" value="<%= roundTripAvailable %>">
+                <input type="hidden" name="originID" value="<%= originID %>">
+                <input type="hidden" name="destinationID" value="<%= destinationID %>">
+                <input type="hidden" name="baseFare" value="<%= baseFare %>">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket Type</th>
+                            <th>Quantity</th>
+                            <th>Trip Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Adult</td>
+                            <td><input type="number" id="adultTickets" name="adultTickets" min="0" value="0" onchange="calculateTotal()"></td>
+                            <td>
+                                <select id="adultTripType" name="adultTripType" onchange="calculateTotal()">
+                                    <option value="oneWay">One-Way</option>
+                                    <option value="roundTrip">Round Trip</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Child (25% Discount)</td>
+                            <td><input type="number" id="childTickets" name="childTickets" min="0" value="0" onchange="calculateTotal()"></td>
+                            <td>
+                                <select id="childTripType" name="childTripType" onchange="calculateTotal()">
+                                    <option value="oneWay">One-Way</option>
+                                    <option value="roundTrip">Round Trip</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Senior (35% Discount)</td>
+                            <td><input type="number" id="seniorTickets" name="seniorTickets" min="0" value="0" onchange="calculateTotal()"></td>
+                            <td>
+                                <select id="seniorTripType" name="seniorTripType" onchange="calculateTotal()">
+                                    <option value="oneWay">One-Way</option>
+                                    <option value="roundTrip">Round Trip</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Disabled (50% Discount)</td>
+                            <td><input type="number" id="disabledTickets" name="disabledTickets" min="0" value="0" onchange="calculateTotal()"></td>
+                            <td>
+                                <select id="disabledTripType" name="disabledTripType" onchange="calculateTotal()">
+                                    <option value="oneWay">One-Way</option>
+                                    <option value="roundTrip">Round Trip</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Display Total Amount -->
+                <div class="fare-container">
+                    <span class="fare-label">Total Amount: <span id="totalAmount">$0.00</span></span>
+                </div>
+
+                <button type="submit" class="confirm-button">Confirm Reservation</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

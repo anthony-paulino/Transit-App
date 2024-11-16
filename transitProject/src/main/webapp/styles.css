@@ -236,6 +236,9 @@ body {
     width: 90%;
     max-width: 1000px;
     margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .schedule-details-container h2 {
@@ -246,14 +249,13 @@ body {
 }
 
 .schedule-overview {
-    display: inline-block;
-    width: 48%;
-    vertical-align: top;
-    margin: 10px 1%;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
 }
 
 .schedule-overview h3 {
@@ -261,6 +263,7 @@ body {
     font-size: 1.4em;
     font-weight: 600;
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .schedule-overview table {
@@ -294,8 +297,13 @@ body {
 
 .round-trip-container {
     width: 100%;
+    max-width: 800px;
     margin: 20px 0;
     text-align: center;
+    background-color: #f7f7f7;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .round-trip-container label {
@@ -313,8 +321,46 @@ body {
 }
 
 .return-schedule-details {
-    display: none;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.return-schedule-details h3 {
+    color: #333;
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.return-schedule-details table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 10px;
+}
+
+.return-schedule-details table th,
+.return-schedule-details table td {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.return-schedule-details table th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.return-schedule-details table td {
+    color: #333;
+    background-color: #ffffff;
 }
 
 .fare-container {

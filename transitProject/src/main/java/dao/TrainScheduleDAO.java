@@ -71,7 +71,6 @@ public class TrainScheduleDAO {
                 if (departureTime != null && arrivalTime != null) {
                     float calculatedFare = calculateFare(baseFare, transitID, scheduleID, originID, destinationID);
                     long travelTime = calculateTravelTime(departureTime, arrivalTime);
-                	System.out.println(scheduleID);
                     TrainSchedule schedule = new TrainSchedule(
                         scheduleID,
                         transitID,
@@ -91,7 +90,6 @@ public class TrainScheduleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return schedules;
     }
 
@@ -105,7 +103,6 @@ public class TrainScheduleDAO {
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-        	System.out.println("1");
             stmt.setInt(1, transitID);
             stmt.setString(2, requiredDirection);
             stmt.setTimestamp(3, new java.sql.Timestamp(afterDateTime.getTime()));
@@ -122,7 +119,6 @@ public class TrainScheduleDAO {
                     // Calculate fare based on segment distance
                     float calculatedFare = calculateFare(baseFare, transitID, scheduleID, originID, destinationID);
                     long travelTime = calculateTravelTime(departureTime, arrivalTime);
-                	System.out.println("4");
                     TrainSchedule schedule = new TrainSchedule(
                         scheduleID,
                         transitID,
@@ -142,7 +138,6 @@ public class TrainScheduleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return returnSchedules;
     }
 

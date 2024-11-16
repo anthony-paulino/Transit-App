@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, java.text.SimpleDateFormat, dao.TrainScheduleDAO, dao.StopsAtDAO, dao.TransitLineDAO, dao.StationDAO, model.StopsAt, model.TrainSchedule" %>
 <%
+
+	//Ensure the user is logged in as a customer
+	String role = (String) session.getAttribute("role");
+	if (role == null || !"customer".equals(role)) {
+	    response.sendRedirect("login.jsp");
+	    return;
+	}
+
    // Retrieve parameters and initialize DAOs as before
    String scheduleIDParam = request.getParameter("scheduleID");
    String originIDParam = request.getParameter("originID");
@@ -34,6 +42,8 @@
        schedule.getTransitID(), subrouteArrivalTime, schedule.getTripDirection(), destinationID, originID
    );
    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
+   boolean hasRoundTripAvailable = !returnSchedules.isEmpty();
+
 %>
 <!DOCTYPE html>
 <html>
@@ -81,22 +91,27 @@
                    </tbody>
                </table>
            </div>
-
            <!-- Round-Trip Selection -->
-           <div class="round-trip-container">
-               <label for="returnSchedule">Round Trip:</label>
-               <select id="returnSchedule" name="returnSchedule" onchange="showReturnDetails(this)">
-                   <option value="">Select a Return Trip</option>
-                   <% int idx = 0; %>
-                   <% for (TrainSchedule returnSchedule : returnSchedules) { %>
-                       <option value="return-schedule-<%= idx %>">
-                           Return: <%= formatter.format(returnSchedule.getDepartureDateTime()) %> - <%= formatter.format(returnSchedule.getArrivalDateTime()) %>
-                       </option>
-                       <% idx++; %>
-                   <% } %>
-               </select>
-           </div>
-
+			<div class="round-trip-container">
+			    <label for="returnSchedule">Round Trip:</label>
+				<% int idx = 0; %>
+			    
+			    <% if (returnSchedules.isEmpty()) { %>
+			        <!-- Display message if no return trips are available -->
+			        <p>No return trips available for this schedule</p>
+			    <% } else { %>
+			        <!-- Display dropdown if return trips are available -->
+			        <select id="returnSchedule" name="returnSchedule" onchange="showReturnDetails(this)">
+			            <option value="">Select a Return Trip</option>
+			            <% for (TrainSchedule returnSchedule : returnSchedules) { %>
+			                <option value="return-schedule-<%= idx %>">
+			                    Return: <%= formatter.format(returnSchedule.getDepartureDateTime()) %> - <%= formatter.format(returnSchedule.getArrivalDateTime()) %>
+			                </option>
+			                <% idx++; %>
+			            <% } %>
+			        </select>
+			    <% } %>
+			</div>
            <!-- Pre-populated Return Schedule Details -->
            <% idx = 0; %>
            <% for (TrainSchedule returnSchedule : returnSchedules) { %>
@@ -133,11 +148,12 @@
            <div class="fare-container">
                <p class="fare-label">Fare per one-way adult ticket: $<%= baseFare %></p>
                <form action="reservationDetails.jsp" method="get">
-                   <input type="hidden" name="scheduleID" value="<%= scheduleID %>">
+                   <input type="hidden" name="incomingScheduleID" value="<%= scheduleID %>">
+                   <input type="hidden" name="returnScheduleID" id="returnScheduleInput" value="">
                    <input type="hidden" name="originID" value="<%= originID %>">
                    <input type="hidden" name="destinationID" value="<%= destinationID %>">
                    <input type="hidden" name="baseFare" value="<%= baseFare %>">
-                   <input type="hidden" id="returnScheduleInput" name="returnScheduleID" value="">
+                   <input type="hidden" name="hasRoundTripAvailable" value="<%= hasRoundTripAvailable %>">                   
                    <button type="submit" class="confirm-button">Make Reservation(s)</button>
                </form>
            </div>
