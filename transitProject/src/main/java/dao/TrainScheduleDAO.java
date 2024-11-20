@@ -1,5 +1,6 @@
 package dao;
 
+import model.StopsAt;
 import model.TrainSchedule;
 import transit.DatabaseConnection;
 import java.sql.Connection;

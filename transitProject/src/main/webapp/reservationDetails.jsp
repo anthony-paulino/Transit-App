@@ -19,7 +19,7 @@
     int incomingScheduleID = Integer.parseInt(inScheduleIDParam);
     int returningScheduleID = -1;
     if (reScheduleIDParam != null && !reScheduleIDParam.isEmpty()) {
-    	returningScheduleID = Integer.parseInt(reScheduleIDParam);
+        returningScheduleID = Integer.parseInt(reScheduleIDParam);
     }
     int originID = Integer.parseInt(originIDParam);
     int destinationID = Integer.parseInt(destinationIDParam);
@@ -34,15 +34,15 @@
     <title>Reservation Details</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script>
-        // JavaScript function to calculate total fare
+        // Function to calculate the total fare
         function calculateTotal() {
             const baseFare = parseFloat(<%= baseFare %>);
             let total = 0;
 
-            // Get quantities and trip types for each ticket type
+            // Ticket types and their discounts
             const ticketTypes = ["adult", "child", "senior", "disabled"];
             const discounts = {
-                "adult": 0,
+                "adult": 0.0,
                 "child": 0.25,
                 "senior": 0.35,
                 "disabled": 0.5
@@ -57,11 +57,10 @@
                 if (tripType === "roundTrip") {
                     fare *= 2;
                 }
-                
+
                 total += fare * quantity;
             });
-				
-            // Update the total display
+
             document.getElementById("totalAmount").textContent = "$" + total.toFixed(2);
         }
 
@@ -70,18 +69,39 @@
             const roundTripAvailable = <%= roundTripAvailable %>;
 
             if (!roundTripAvailable) {
-                // Loop through each trip type dropdown and disable or hide the "Round Trip" option
                 const tripTypes = ["adultTripType", "childTripType", "seniorTripType", "disabledTripType"];
                 tripTypes.forEach(id => {
                     const select = document.getElementById(id);
                     select.querySelectorAll('option[value="roundTrip"]').forEach(option => {
-                        option.disabled = true; // or use option.style.display = "none" to hide it
+                        option.disabled = true;
                     });
                 });
             }
         }
 
-        window.onload = lockTripType;
+        // Function to validate ticket quantities before submission
+        function validateForm(event) {
+            const ticketTypes = ["adult", "child", "senior", "disabled"];
+            let totalQuantity = 0;
+
+            ticketTypes.forEach(type => {
+                const quantity = parseInt(document.getElementById(type + "Tickets").value) || 0;
+                totalQuantity += quantity;
+            });
+
+            if (totalQuantity === 0) {
+                alert("Please select at least one ticket quantity.");
+                event.preventDefault(); // Prevent form submission
+                return false;
+            }
+
+            return true;
+        }
+
+        window.onload = () => {
+            lockTripType();
+            calculateTotal();
+        };
     </script>
 </head>
 <body>
@@ -91,16 +111,16 @@
         </div>
         <div class="reservation-details-container">
             <h2>Reservation Details</h2>
-            <p>Each ticket counts as one reservation</p>
             <p>Fare per one-way adult ticket: $<%= baseFare %></p>
             
-            <form action="processReservation.jsp" method="post">
+            <form action="processReservation.jsp" method="post" onsubmit="return validateForm(event)">
                 <input type="hidden" name="incomingScheduleID" value="<%= incomingScheduleID %>">
                 <input type="hidden" name="returningScheduleID" value="<%= returningScheduleID %>">
                 <input type="hidden" name="hasRoundTripAvailable" value="<%= roundTripAvailable %>">
                 <input type="hidden" name="originID" value="<%= originID %>">
                 <input type="hidden" name="destinationID" value="<%= destinationID %>">
                 <input type="hidden" name="baseFare" value="<%= baseFare %>">
+
                 <table>
                     <thead>
                         <tr>
@@ -153,7 +173,6 @@
                     </tbody>
                 </table>
 
-                <!-- Display Total Amount -->
                 <div class="fare-container">
                     <span class="fare-label">Total Amount: <span id="totalAmount">$0.00</span></span>
                 </div>

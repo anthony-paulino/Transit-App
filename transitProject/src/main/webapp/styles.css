@@ -69,7 +69,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* Navbar styling */
+/* General Navbar styling */
 .navbar {
     background-color: #333;
     color: #ffffff;
@@ -105,23 +105,137 @@ body {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 80%;
-    max-width: 600px;
+    width: 90%;
+    max-width: 950px;
     text-align: center;
     transition: all 0.3s ease;
 }
 
-/* Customer Service container */
-.dashboard-container {
+/* Customer Reservation Container */
+.customer-reservation-container {
     margin-top: 100px;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    width: 80%;
-    max-width: 600px;
+    width: 90%;
+    max-width: 800px; /* Adjusted for better table fit */
     text-align: center;
-    transition: all 0.3s ease;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.customer-reservation-container h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.customer-reservation-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1em; /* Adjusted for better readability */
+}
+
+.customer-reservation-container table th,
+.customer-reservation-container table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.customer-reservation-container table th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.customer-reservation-container table td {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.customer-reservation-container table tr:nth-child(even) td {
+    background-color: #f3f3f3;
+}
+
+.customer-reservation-container table button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin: 5px; /* Added margin for better spacing */
+}
+
+.customer-reservation-container table button:hover {
+    opacity: 0.9;
+}
+
+.customer-reservation-container table .open-button {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.customer-reservation-container table .open-button:hover {
+    background-color: #45a049;
+}
+
+.customer-reservation-container table .cancel-button {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.customer-reservation-container table .cancel-button:hover {
+    background-color: #c9302c;
+}
+
+/* View Reservation Container */
+.view-reservation-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 100%; /* Remove max-width constraint */
+    margin: auto;
+    text-align: center;
+}
+
+.reservation-table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.reservation-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reservation-table-wrapper th, 
+.reservation-table-wrapper td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.reservation-table-wrapper th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+.reservation-table-wrapper td {
+    background-color: #f9f9f9;
+}
+
+.reservation-table-wrapper tr:nth-child(even) td {
+    background-color: #f3f3f3;
 }
 
 /* Customer Schedule container */
@@ -376,7 +490,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* Reservation heading */
+/* Reservation Details Container */
 .reservation-details-container h2 {
     color: #333;
     font-size: 1.8em;
@@ -447,3 +561,203 @@ body {
     border-radius: 5px;
     text-align: center;
 }
+
+/* Customer Service Container */
+.customer-service-container {
+    margin-top: 70px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 1200px;
+    transition: all 0.3s ease;
+}
+
+.customer-service-container h2, .post-question-section h4 {
+    color: #333;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Search Form */
+.search-form {
+    margin-bottom: 30px;
+}
+
+.search-form label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+.search-form input[type="text"] {
+    padding: 10px;
+    width: 60%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.search-form button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #45a049;
+}
+
+/* Questions Section */
+.question-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.question-box p {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.question-box button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.question-box button:hover {
+    background-color: #45a049;
+}
+
+/* Replies Section */
+.replies-container {
+    margin-top: 15px;
+    padding-left: 20px;
+    border-left: 3px solid #ddd;
+}
+
+.reply {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.reply p {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.reply-date {
+    font-size: 0.8em;
+    color: #777;
+}
+
+/* Reply Form */
+.reply-form {
+    display: none;
+    margin-top: 10px;
+}
+
+.reply-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    resize: vertical;
+}
+
+.reply-form button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.reply-form button:hover {
+    background-color: #45a049;
+}
+
+/* Post Question Section */
+.post-question-section {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+}
+
+.post-question-section label {
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.post-question-section textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-bottom: 15px;
+    resize: vertical;
+}
+
+.post-question-section button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-question-section button:hover {
+    background-color: #45a049;
+}
+
+

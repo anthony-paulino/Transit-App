@@ -149,7 +149,7 @@
                <p class="fare-label">Fare per one-way adult ticket: $<%= baseFare %></p>
                <form action="reservationDetails.jsp" method="get">
                    <input type="hidden" name="incomingScheduleID" value="<%= scheduleID %>">
-                   <input type="hidden" name="returnScheduleID" id="returnScheduleInput" value="">
+                   <input type="hidden" name="returningScheduleID" id="returnScheduleInput" value="">
                    <input type="hidden" name="originID" value="<%= originID %>">
                    <input type="hidden" name="destinationID" value="<%= destinationID %>">
                    <input type="hidden" name="baseFare" value="<%= baseFare %>">
@@ -168,8 +168,10 @@
            // Show selected return schedule details
            const selectedId = select.value;
            if (selectedId) {
-               document.getElementById(selectedId).style.display = 'block';
-               document.getElementById('returnScheduleInput').value = selectedId;
+               const idx = parseInt(selectedId.split('-')[2], 10);
+               const returnSchedules = <%= returnSchedules.stream().map(TrainSchedule::getScheduleID).toList() %>;
+               console.log(returnSchedules[idx]);
+               document.getElementById('returnScheduleInput').value = returnSchedules[idx];
            }
        }
    </script>

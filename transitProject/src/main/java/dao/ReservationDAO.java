@@ -1,57 +1,56 @@
 package dao;
 
-import java.sql.*;
 import model.Reservation;
 import transit.DatabaseConnection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 import java.math.BigDecimal;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReservationDAO {
 
-    // Method to add a reservation
-    public boolean addReservation(Reservation reservation) {
-        String sql = "INSERT INTO Reservations (dateMade, scheduleID, customerID, originID, destinationID, ticketType, tripType, fare) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setDate(1, new java.sql.Date(reservation.getDateMade().getTime()));
-            stmt.setInt(2, reservation.getScheduleID());
-            stmt.setInt(3, reservation.getCustomerID());
-            stmt.setInt(4, reservation.getOriginID());
-            stmt.setInt(5, reservation.getDestinationID());
-            stmt.setString(6, reservation.getTicketType());
-            stmt.setString(7, reservation.getTripType());
-            stmt.setBigDecimal(8, reservation.getFare());
+    // Create a new reservation
+    public int createReservation(Reservation reservation) {
+        String sql = "INSERT INTO Reservations (customerID, dateMade, totalFare) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, reservation.getCustomerID());
+            stmt.setDate(2, new java.sql.Date(reservation.getDateMade().getTime()));
+            stmt.setBigDecimal(3, reservation.getTotalFare());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1); // Return the generated reservation ID
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return -1; // Indicates failure
     }
 
-    // Method to retrieve reservations by customer ID
+    // Retrieve reservations by customer ID
     public List<Reservation> getReservationsByCustomerID(int customerID) {
         List<Reservation> reservations = new ArrayList<>();
         String sql = "SELECT * FROM Reservations WHERE customerID = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, customerID);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, customerID);
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 Reservation reservation = new Reservation(
-                    rs.getInt("reservationNumber"),
-                    rs.getDate("dateMade"),
-                    rs.getInt("scheduleID"),
+                    rs.getInt("reservationID"),
                     rs.getInt("customerID"),
-                    rs.getInt("originID"),
-                    rs.getInt("destinationID"),
-                    rs.getString("ticketType"),
-                    rs.getString("tripType"),
-                    rs.getBigDecimal("fare")
+                    rs.getDate("dateMade"),
+                    rs.getBigDecimal("totalFare")
                 );
                 reservations.add(reservation);
             }
@@ -61,18 +60,68 @@ public class ReservationDAO {
         return reservations;
     }
 
-    // Optional: Method to delete or cancel a reservation based on reservationNumber
-    public boolean cancelReservation(int reservationNumber) {
-        String sql = "DELETE FROM Reservations WHERE reservationNumber = ?";
+    // Update total fare for a reservation
+    public boolean updateReservationTotalFare(int reservationID, BigDecimal totalFare) {
+        String sql = "UPDATE Reservations SET totalFare = ? WHERE reservationID = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, reservationNumber);
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBigDecimal(1, totalFare);
+            stmt.setInt(2, reservationID);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
+
+    public boolean deleteReservation(int reservationID) {
+        Connection conn = null;
+        PreparedStatement deleteLinkedTicketsStmt = null;
+        PreparedStatement deleteUnlinkedTicketsStmt = null;
+        PreparedStatement deleteReservationStmt = null;
+        boolean success = false;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            // Step 1: Delete tickets with non-null linkedTicketID
+            String deleteLinkedTicketsQuery = "DELETE FROM tickets WHERE reservationID = ? AND linkedTicketID IS NOT NULL";
+            deleteLinkedTicketsStmt = conn.prepareStatement(deleteLinkedTicketsQuery);
+            deleteLinkedTicketsStmt.setInt(1, reservationID);
+            deleteLinkedTicketsStmt.executeUpdate();
+
+            // Step 2: Delete tickets with null linkedTicketID
+            String deleteUnlinkedTicketsQuery = "DELETE FROM tickets WHERE reservationID = ? AND linkedTicketID IS NULL";
+            deleteUnlinkedTicketsStmt = conn.prepareStatement(deleteUnlinkedTicketsQuery);
+            deleteUnlinkedTicketsStmt.setInt(1, reservationID);
+            deleteUnlinkedTicketsStmt.executeUpdate();
+
+            // Step 3: Delete the reservation itself
+            String deleteReservationQuery = "DELETE FROM reservations WHERE reservationID = ?";
+            deleteReservationStmt = conn.prepareStatement(deleteReservationQuery);
+            deleteReservationStmt.setInt(1, reservationID);
+            int rowsAffected = deleteReservationStmt.executeUpdate();
+
+            success = (rowsAffected > 0); // If the reservation row was deleted, consider it a success
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (deleteLinkedTicketsStmt != null) deleteLinkedTicketsStmt.close();
+                if (deleteUnlinkedTicketsStmt != null) deleteUnlinkedTicketsStmt.close();
+                if (deleteReservationStmt != null) deleteReservationStmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return success;
+    }
+
 }
+

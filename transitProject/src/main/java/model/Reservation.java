@@ -2,56 +2,72 @@ package model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Reservation {
-    private int reservationNumber;
-    private Date dateMade;
-    private int scheduleID;
-    private int customerID;
-    private int originID;
-    private int destinationID;
-    private String ticketType; // "adult", "child", "senior", "disabled"
-    private String tripType;   // "one-way", "round-trip"
-    private BigDecimal fare;   // Final fare after discounts and adjustments
+    private int reservationID;          // Unique ID for the reservation
+    private int customerID;             // ID of the customer who made the reservation
+    private Date dateMade;              // Date when the reservation was created
+    private BigDecimal totalFare;           // Total fare for the reservation
+    private List<Ticket> tickets;       // List of tickets associated with this reservation
 
     // Constructor
-    public Reservation(int reservationNumber, Date dateMade, int scheduleID, int customerID, int originID, int destinationID, String ticketType, String tripType, BigDecimal fare) {
-        this.reservationNumber = reservationNumber;
-        this.dateMade = dateMade;
-        this.scheduleID = scheduleID;
+    public Reservation(int reservationID, int customerID, Date dateMade, BigDecimal totalFare) {
+        this.reservationID = reservationID;
         this.customerID = customerID;
-        this.originID = originID;
-        this.destinationID = destinationID;
-        this.ticketType = ticketType;
-        this.tripType = tripType;
-        this.fare = fare;
+        this.dateMade = dateMade;
+        this.totalFare = totalFare;
     }
 
     // Getters and Setters
-    public int getReservationNumber() { return reservationNumber; }
-    public void setReservationNumber(int reservationNumber) { this.reservationNumber = reservationNumber; }
+    public int getReservationID() {
+        return reservationID;
+    }
 
-    public Date getDateMade() { return dateMade; }
-    public void setDateMade(Date dateMade) { this.dateMade = dateMade; }
+    public void setReservationID(int reservationID) {
+        this.reservationID = reservationID;
+    }
 
-    public int getScheduleID() { return scheduleID; }
-    public void setScheduleID(int scheduleID) { this.scheduleID = scheduleID; }
+    public int getCustomerID() {
+        return customerID;
+    }
 
-    public int getCustomerID() { return customerID; }
-    public void setCustomerID(int customerID) { this.customerID = customerID; }
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
 
-    public int getOriginID() { return originID; }
-    public void setOriginID(int originID) { this.originID = originID; }
+    public Date getDateMade() {
+        return dateMade;
+    }
 
-    public int getDestinationID() { return destinationID; }
-    public void setDestinationID(int destinationID) { this.destinationID = destinationID; }
+    public void setDateMade(Date dateMade) {
+        this.dateMade = dateMade;
+    }
 
-    public String getTicketType() { return ticketType; }
-    public void setTicketType(String ticketType) { this.ticketType = ticketType; }
+    public BigDecimal getTotalFare() {
+        return totalFare;
+    }
 
-    public String getTripType() { return tripType; }
-    public void setTripType(String tripType) { this.tripType = tripType; }
+    public void setTotalFare(BigDecimal totalFare) {
+        this.totalFare = totalFare;
+    }
 
-    public BigDecimal getFare() { return fare; }
-    public void setFare(BigDecimal fare) { this.fare = fare; }
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationID=" + reservationID +
+                ", customerID=" + customerID +
+                ", dateMade=" + dateMade +
+                ", totalFare=" + totalFare +
+                ", tickets=" + tickets +
+                '}';
+    }
 }

@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Navbar with Home and Logout -->
+        <!-- Navbar -->
         <div class="navbar">
             <a href="repDashboard.jsp">Home</a>
             <a href="logout.jsp">Logout</a>
@@ -24,8 +24,26 @@
 
         <!-- Content -->
         <div class="content">
-            <h2>Welcome to the Customer Representative Dashboard</h2>
-            <p>This is where customer representatives can manage schedules, respond to questions, and view reservations.</p>
+            <h2>Welcome to the Employee Dashboard</h2>
+            <p>Use the options below to manage reservations, train schedules, or respond to customer inquiries:</p>
+            
+            <!-- Action Buttons -->
+            <div class="option-buttons">
+                <!-- Manage Reservations -->
+                <form action="manageReservations.jsp" method="get">
+                    <button type="submit" class="long-button">Manage Reservations</button>
+                </form>
+                
+                <!-- Manage Train Schedules -->
+                <form action="manageSchedules.jsp" method="get">
+                    <button type="submit" class="long-button">Manage Train Schedules</button>
+                </form>
+                
+                <!-- Respond to Customer Questions -->
+                <form action="respondToCustomerQuestions.jsp" method="get">
+                    <button type="submit" class="long-button">Respond to Customer Questions</button>
+                </form>
+            </div>
         </div>
     </div>
 </body>
