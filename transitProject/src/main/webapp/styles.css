@@ -760,4 +760,81 @@ body {
     background-color: #45a049;
 }
 
+/* Manage Employee Container */
+.manage-employee-container {
+    margin-top: 100px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 1000px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.manage-employee-container h2 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.manage-employee-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1em;
+}
+
+.manage-employee-container table th,
+.manage-employee-container table td {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.manage-employee-container table th {
+    background-color: #333;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.manage-employee-container table td {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.manage-employee-container table tr:nth-child(even) td {
+    background-color: #f3f3f3;
+}
+
+.manage-employee-container button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.manage-employee-container button:hover {
+    background-color: #45a049;
+}
+
+.manage-employee-container .cancel-button {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.manage-employee-container .cancel-button:hover {
+    background-color: #c9302c;
+}
+
 

@@ -131,5 +131,69 @@ public class EmployeeDAO {
 	    }
 	    return null;
 	}
+	
+	public List<Object[]> getReservationsByTransitLine() {
+        String query = "SELECT tl.transitLineName, r.reservationNumber, r.dateMade, c.firstName, c.lastName, r.fare " +
+                       "FROM reservations r " +
+                       "JOIN train_schedules ts ON r.scheduleID = ts.scheduleID " +
+                       "JOIN transitline tl ON ts.transitID = tl.transitID " +
+                       "JOIN customers c ON r.customerID = c.customerID " +
+                       "ORDER BY tl.transitLineName, r.dateMade";
+
+        List<Object[]> results = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("transitLineName"),
+                    rs.getInt("reservationNumber"),
+                    rs.getDate("dateMade"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName"),
+                    rs.getBigDecimal("fare")
+                };
+                results.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+    //////
+    public List<Object[]> getReservationsByCustomerName() {
+        String query = "SELECT CONCAT(c.firstName, ' ', c.lastName) AS customerName, " +
+                       "r.reservationNumber, r.dateMade, tl.transitLineName, r.fare " +
+                       "FROM reservations r " +
+                       "JOIN customers c ON r.customerID = c.customerID " +
+                       "JOIN train_schedules ts ON r.scheduleID = ts.scheduleID " +
+                       "JOIN transitline tl ON ts.transitID = tl.transitID " +
+                       "ORDER BY customerName, r.dateMade";
+
+        List<Object[]> results = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("customerName"),
+                    rs.getInt("reservationNumber"),
+                    rs.getDate("dateMade"),
+                    rs.getString("transitLineName"),
+                    rs.getBigDecimal("fare")
+                };
+                results.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
 
 }

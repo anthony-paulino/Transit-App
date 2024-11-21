@@ -25,7 +25,22 @@
         <!-- Content -->
         <div class="content">
             <h2>Welcome to the Manager Dashboard</h2>
-            <p>This is where managers can view reports, manage employees, and review revenue and reservations.</p>
+             <p>This is where managers can perform administrative tasks.</p>
+
+            <!-- Button to Manage Employees -->
+            <form action="manageEmployees.jsp" method="get">
+                <button type="submit" class="long-button">Manage Employees</button>
+            </form>
+            
+            <!-- Button to View Reservation By Transit Line-->
+            <form action="reservationsByTransitLine.jsp" method="get">
+			    <button type="submit" class="long-button">View Reservations by Transit Line</button>
+			</form>
+			
+			<!-- Button to View Reservation By Customer Name-->
+			<form action="reservationsByCustomer.jsp" method="get">
+			    <button type="submit" class="long-button">View Reservations by Customer Name</button>
+			</form>
         </div>
     </div>
 </body>

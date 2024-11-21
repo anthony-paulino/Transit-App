@@ -168,6 +168,7 @@
            // Show selected return schedule details
            const selectedId = select.value;
            if (selectedId) {
+               document.getElementById(selectedId).style.display = 'block';
                const idx = parseInt(selectedId.split('-')[2], 10);
                const returnSchedules = <%= returnSchedules.stream().map(TrainSchedule::getScheduleID).toList() %>;
                console.log(returnSchedules[idx]);

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="java.util.*, java.text.SimpleDateFormat, dao.TicketDAO, dao.StationDAO, dao.TrainScheduleDAO, dao.TransitLineDAO, model.Ticket, model.TrainSchedule" %>
+<%@ page import="java.util.*, java.text.SimpleDateFormat, dao.StopsAtDAO, dao.TicketDAO, dao.StationDAO, dao.TrainScheduleDAO, dao.TransitLineDAO, model.Ticket, model.TrainSchedule" %>
 <%
     String reservationIDParam = request.getParameter("reservationID");
     if (reservationIDParam == null) {
@@ -12,10 +12,11 @@
     StationDAO stationDAO = new StationDAO();
     TrainScheduleDAO scheduleDAO = new TrainScheduleDAO();
     TransitLineDAO transitLineDAO = new TransitLineDAO();
+    StopsAtDAO stopsAtDAO = new StopsAtDAO();
 
     List<Ticket> tickets = ticketDAO.getTicketsByReservationID(reservationID);
     
-    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
+    SimpleDateFormat f = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
 
 %>
 <!DOCTYPE html>
@@ -56,22 +57,23 @@
                                     if (ticket.getLinkedTicketID() == null) {
                                         continue;
                                     }
-
                                     TrainSchedule returningSchedule = scheduleDAO.getTrainSchedule(ticket.getScheduleID());
                                     String transitLineName = transitLineDAO.getTransitLineName(returningSchedule.getTransitID());
                                     String destinationName = stationDAO.getStation(ticket.getOriginID()).getName();
-                                    String originName = null;
+                                    String originName = stationDAO.getStation(ticket.getDestinationID()).getName();
+                                    Date reDepartureTime = stopsAtDAO.getDepartureTimeForStation(ticket.getScheduleID(), ticket.getOriginID());
+                                    Date reArrivalTime = stopsAtDAO.getArrivalTimeForStation(ticket.getScheduleID(), ticket.getDestinationID());
                                     Ticket incomingTicket = ticketDAO.getLinkedTicket(ticket.getLinkedTicketID());
                                     if (incomingTicket != null) {
-                                        TrainSchedule incomingSchedule = scheduleDAO.getTrainSchedule(incomingTicket.getScheduleID());
-                                        originName = stationDAO.getStation(incomingTicket.getOriginID()).getName();
+                                        Date inDepartureTime = stopsAtDAO.getDepartureTimeForStation(incomingTicket.getScheduleID(), incomingTicket.getOriginID());
+                                        Date inArrivalTime = stopsAtDAO.getArrivalTimeForStation(incomingTicket.getScheduleID(), incomingTicket.getDestinationID());
                             %>
                                         <tr>
                                             <td><%= transitLineName %></td>
                                             <td><%= originName %></td>
                                             <td><%= destinationName %></td>
-                                            <td><%= formatter.format(incomingSchedule.getDepartureDateTime()) %></td>
-                                            <td><%= formatter.format(incomingSchedule.getArrivalDateTime()) %></td>
+                                            <td><%= f.format(inDepartureTime) %></td>
+                                            <td><%= f.format(inArrivalTime) %></td>
                                             <td><%= incomingTicket.getTicketType() %></td>
                                             <td><%= incomingTicket.getTripType() %>(Incoming)</td>
                                             <td>$<%= incomingTicket.getFare() %></td>
@@ -80,8 +82,8 @@
                                             <td><%= transitLineName %></td>
                                             <td><%= destinationName %></td>
                                             <td><%= originName %></td>
-                                            <td><%= formatter.format(returningSchedule.getDepartureDateTime()) %></td>
-                                            <td><%= formatter.format(returningSchedule.getArrivalDateTime()) %></td>
+                                            <td><%= f.format(reDepartureTime) %></td>
+                                            <td><%= f.format(reArrivalTime) %></td>
                                             <td><%= ticket.getTicketType() %></td>
                                             <td><%= ticket.getTripType() %>(Return)</td>
                                             <td>$<%= ticket.getFare() %></td>
@@ -90,15 +92,17 @@
                                 } else {
                                     TrainSchedule schedule = scheduleDAO.getTrainSchedule(ticket.getScheduleID());
                                     String transitLineName = transitLineDAO.getTransitLineName(schedule.getTransitID());
-                                    String originName = stationDAO.getStation(ticket.getOriginID()).getName();
                                     String destinationName = stationDAO.getStation(ticket.getDestinationID()).getName();
+                                    String originName = stationDAO.getStation(ticket.getDestinationID()).getName();
+                                    Date departureTime = stopsAtDAO.getDepartureTimeForStation(ticket.getScheduleID(), ticket.getOriginID());
+                                    Date arrivalTime = stopsAtDAO.getArrivalTimeForStation(ticket.getScheduleID(), ticket.getDestinationID());
                             %>
                                     <tr>
                                         <td><%= transitLineName %></td>
                                         <td><%= originName %></td>
                                         <td><%= destinationName %></td>
-                                        <td><%= formatter.format(schedule.getDepartureDateTime()) %></td>
-                                        <td><%= formatter.format(schedule.getArrivalDateTime()) %></td>
+                                        <td><%= f.format(departureTime) %></td>
+                                        <td><%= f.format(arrivalTime) %></td>
                                         <td><%= ticket.getTicketType() %></td>
                                         <td><%= ticket.getTripType() %></td>
                                         <td>$<%= ticket.getFare() %></td>
