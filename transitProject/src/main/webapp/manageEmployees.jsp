@@ -82,7 +82,7 @@
             <input type="text" id="ssn" name="ssn" required><br>
             <button type="submit" class="button">Add Employee</button>
         </form>
-
+		<br></br>
         <!-- Employee List -->
         <h3>Employee List</h3>
         <table>

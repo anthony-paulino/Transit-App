@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
     fare DECIMAL(10, 2) NOT NULL,
     linkedTicketID INT DEFAULT NULL, -- Link to the incoming ticket for round trips
     FOREIGN KEY (reservationID) REFERENCES Reservations(reservationID),
-    FOREIGN KEY (scheduleID) REFERENCES Train_Schedules(scheduleID) ON DELETE CASCADE,
+    FOREIGN KEY (scheduleID) REFERENCES Train_Schedules(scheduleID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (originID) REFERENCES Stations(stationID),
     FOREIGN KEY (destinationID) REFERENCES Stations(stationID),
     FOREIGN KEY (linkedTicketID) REFERENCES Tickets(ticketID) -- Self-referencing foreign key
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS Stops_At (
     stopNumber INT,
     arrivalDateTime DATETIME,
     departureDateTime DATETIME,
-    FOREIGN KEY (scheduleID) REFERENCES Train_Schedules(scheduleID) ON DELETE CASCADE,
+    FOREIGN KEY (scheduleID) REFERENCES Train_Schedules(scheduleID) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (stationID) REFERENCES Stations(stationID)
 );
 
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS CommentReply (
     employeeID INT,
     datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID),
-    FOREIGN KEY (employeeID) REFERENCES Employees(employeeID)
+    FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE
 );
 
 -- Junction table to associate comments/replies with specific questions

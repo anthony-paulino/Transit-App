@@ -16,45 +16,56 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h2>Reservations by Customer Name</h2>
-    <%
-        ReservationDAO reservationDAO = new ReservationDAO();
-        List<Object[]> reservations = reservationDAO.getReservationsByCustomerName();
-    %>
-    <table border="1">
-        <tr>
-            <th>Customer Name</th>
-            <th>Reservation Number</th>
-            <th>Date Made</th>
-            <th>Transit Line</th>
-            <th>Fare</th>
-        </tr>
+    <div class="reservation-by-customer-container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <a href="managerDashboard.jsp">Back to Dashboard</a>
+        </div>
+        
+        <!-- Page Title -->
+        <h2>Reservations by Customer Name</h2>
+        
         <%
-            String currentCustomerName = "";
-            for (Object[] row : reservations) {
-                String customerName = (String) row[0];
-                if (!customerName.equals(currentCustomerName)) {
-                    currentCustomerName = customerName;
+            ReservationDAO reservationDAO = new ReservationDAO();
+            List<Object[]> reservations = reservationDAO.getReservationsByCustomerName();
         %>
-        <tr>
-            <td colspan="5" style="background-color: #f0f0f0;"><strong><%= customerName %></strong></td>
-        </tr>
-        <%
-                }
-        %>
-        <tr>
-            <td></td> <!-- Empty column for grouped row -->
-            <td><%= row[1] %></td>
-            <td><%= row[2] %></td>
-            <td><%= row[3] %></td>
-            <td><%= row[4] %></td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
-    <form action="managerDashboard.jsp" method="get" style="margin-top:20px;">
-        <button type="submit">Back to Dashboard</button>
-    </form>
+        
+        <!-- Reservation Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Reservation Number</th>
+                    <th>Date Made</th>
+                    <th>Transit Line</th>
+                    <th>Fare</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    String currentCustomerName = "";
+                    for (Object[] row : reservations) {
+                        String customerName = (String) row[0];
+                        if (!customerName.equals(currentCustomerName)) {
+                            currentCustomerName = customerName;
+                %>
+                <tr class="customer-name-row">
+                    <td colspan="4"><strong><%= customerName %></strong></td>
+                </tr>
+                <%
+                        }
+                %>
+                <tr>
+                    <td><%= row[1] %></td>
+                    <td><%= row[2] %></td>
+                    <td><%= row[3] %></td>
+                    <td><%= "$" + row[4] %></td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+

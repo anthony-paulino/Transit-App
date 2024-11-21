@@ -124,7 +124,7 @@ public class ReservationDAO {
     }
     
     public List<Object[]> getReservationsByTransitLine() {
-        String query = "SELECT " +
+        String query = "SELECT DISTINCT " +
                        "tl.transitLineName, " +
                        "r.reservationID, " +
                        "r.dateMade, " +
@@ -136,7 +136,7 @@ public class ReservationDAO {
                        "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
                        "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
                        "JOIN Customers c ON r.customerID = c.customerID " +
-                       "ORDER BY tl.transitLineName, r.dateMade";
+                       "ORDER BY tl.transitLineName, r.reservationID";
 
         List<Object[]> results = new ArrayList<>();
 
@@ -163,14 +163,14 @@ public class ReservationDAO {
     }
 
     public List<Object[]> getReservationsByCustomerName() {
-        String query = "SELECT CONCAT(c.firstName, ' ', c.lastName) AS customerName, " +
+        String query = "SELECT DISTINCT CONCAT(c.firstName, ' ', c.lastName) AS customerName, " +
                        "r.reservationID, r.dateMade, tl.transitLineName, r.totalFare " +
                        "FROM Reservations r " +
                        "JOIN Customers c ON r.customerID = c.customerID " +
                        "JOIN Tickets t ON r.reservationID = t.reservationID " +
                        "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
                        "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
-                       "ORDER BY customerName, r.dateMade";
+                       "ORDER BY customerName, r.reservationID";
 
         List<Object[]> results = new ArrayList<>();
 
