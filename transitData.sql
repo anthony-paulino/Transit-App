@@ -8,7 +8,9 @@ INSERT INTO Customers (customerID, lastName, firstName, emailAddress, username, 
 -- Insert Employees
 INSERT INTO Employees (employeeID, ssn, lastName, firstName, username, password, isAdmin) VALUES
 (1, '123-45-6789', 'Johnson', 'Alice', 'alicejohnson', 'admin', TRUE),
-(2, '987-65-4321', 'Brown', 'Bob', 'bobbrown', 'rep', FALSE);
+(2, '987-65-4321', 'Brown', 'Bob', 'bobbrown', 'rep', FALSE),
+(3, '431-65-2323', 'Edit', 'Me', 'EditTest', 'rep', FALSE),
+(4, '931-65-3321', 'Delete', 'Me', 'DeleteTest', 'rep', FALSE);
 
 -- Insert Trains
 INSERT INTO Trains (trainID) VALUES

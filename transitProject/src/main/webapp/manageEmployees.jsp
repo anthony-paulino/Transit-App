@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="dao.EmployeeDAO" %>
-<%@ page import="model.Employee" %>
+<%@ page import="java.util.List, dao.EmployeeDAO, model.Employee" %>
 <%
     // Check if user is logged in as a manager
     String role = (String) session.getAttribute("role");
@@ -49,21 +47,26 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div class="navbar">
-        <a href="managerDashboard.jsp">Back to Dashboard</a>
-    </div>
     <div class="manage-employee-container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <a href="managerDashboard.jsp">Back to Dashboard</a>
+        </div>
+
+        <!-- Page Content -->
         <h2>Manage Employees</h2>
-        <%
+
+        <!-- Message Display -->
+        <% 
             String message = (String) request.getAttribute("message");
             if (message != null) {
         %>
-            <p style="color:green;"><%= message %></p>
-        <%
-            }
+            <p class="success-message"><%= message %></p>
+        <% 
+            } 
         %>
 
-        <!-- Add New Employee -->
+        <!-- Add New Employee Form -->
         <h3>Add New Employee</h3>
         <form action="manageEmployees.jsp" method="post">
             <input type="hidden" name="action" value="add">
@@ -77,10 +80,10 @@
             <input type="password" id="password" name="password" required><br>
             <label for="ssn">SSN:</label>
             <input type="text" id="ssn" name="ssn" required><br>
-            <button type="submit">Add Employee</button>
+            <button type="submit" class="button">Add Employee</button>
         </form>
 
-        <!-- List of Employees -->
+        <!-- Employee List -->
         <h3>Employee List</h3>
         <table>
             <thead>
@@ -94,9 +97,7 @@
                 </tr>
             </thead>
             <tbody>
-                <%
-                    for (Employee employee : employees) {
-                %>
+                <% for (Employee employee : employees) { %>
                 <tr>
                     <td><%= employee.getEmployeeID() %></td>
                     <td><%= employee.getFirstName() %></td>
@@ -106,18 +107,16 @@
                     <td>
                         <form action="editEmployee.jsp" method="get" style="display:inline;">
                             <input type="hidden" name="employeeID" value="<%= employee.getEmployeeID() %>">
-                            <button type="submit">Edit</button>
+                            <button type="submit" class="button open-button">Edit</button>
                         </form>
                         <form action="manageEmployees.jsp" method="post" style="display:inline;">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="employeeID" value="<%= employee.getEmployeeID() %>">
-                            <button type="submit" class="cancel-button">Delete</button>
+                            <button type="submit" class="button cancel-button">Delete</button>
                         </form>
                     </td>
                 </tr>
-                <%
-                    }
-                %>
+                <% } %>
             </tbody>
         </table>
     </div>
