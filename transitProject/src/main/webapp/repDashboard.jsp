@@ -43,6 +43,10 @@
                 <form action="respondToCustomerQuestions.jsp" method="get">
                     <button type="submit" class="long-button">Respond to Customer Questions</button>
                 </form>
+                <!-- List of Train Schedules For A Given Station -->
+                <form action="repScheduleByStation.jsp" method="get">
+                    <button type="submit" class="long-button">List of Schedules For A Given Station</button>
+                </form>
             </div>
         </div>
     </div>

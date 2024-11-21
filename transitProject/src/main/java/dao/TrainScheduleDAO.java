@@ -93,6 +93,67 @@ public class TrainScheduleDAO {
         }
         return schedules;
     }
+    
+    public List<TrainSchedule> searchSchedulesByStationWithFares(int stationID, Date travelDate) {
+        List<TrainSchedule> schedules = new ArrayList<>();
+        String query = "SELECT DISTINCT ts.* FROM Train_Schedules ts "
+                     + "JOIN Stops_At sa ON ts.scheduleID = sa.scheduleID "
+                     + "WHERE sa.stationID = ? "
+                     + "AND DATE(ts.departureDateTime) = ? "
+                     + "ORDER BY ts.departureDateTime";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, stationID);
+            stmt.setDate(2, new java.sql.Date(travelDate.getTime()));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int scheduleID = rs.getInt("scheduleID");
+                int transitID = rs.getInt("transitID");
+                float baseFare = transitLineDAO.getBaseFareByTransitID(transitID);
+
+                // Step 1: Retrieve all stops for the schedule
+                List<StopsAt> stops = stopsAtDAO.getStopsByScheduleID(scheduleID);
+
+                for (StopsAt originStop : stops) {
+                    for (StopsAt destinationStop : stops) {
+                        // Step 2: Ensure the stationID is part of the route (origin or destination)
+                        if (originStop.getStationID() == stationID || destinationStop.getStationID() == stationID) {
+                            // Ensure the route direction is valid (origin comes before destination)
+                            if (originStop.getStopNumber() < destinationStop.getStopNumber()) {
+                                // Step 3: Calculate fare for the subroute
+                                int segmentStops = destinationStop.getStopNumber() - originStop.getStopNumber();
+                                float calculatedFare = (baseFare / (stops.size() - 1)) * segmentStops;
+
+                                // Step 4: Add the schedule to the result
+                                TrainSchedule schedule = new TrainSchedule(
+                                    scheduleID,
+                                    transitID,
+                                    rs.getInt("trainID"),
+                                    originStop.getStationID(),
+                                    destinationStop.getStationID(),
+                                    originStop.getDepartureDateTime(),
+                                    destinationStop.getArrivalDateTime(),
+                                    calculatedFare,
+                                    calculateTravelTime(originStop.getDepartureDateTime(), destinationStop.getArrivalDateTime()),
+                                    rs.getString("tripDirection") // Include trip direction
+                                );
+
+                                schedules.add(schedule);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return schedules;
+    }
+
 
     public List<TrainSchedule> availableOppositeDirectionSchedules(int transitID, Date afterDateTime, String tripDirection, int originID, int destinationID) { 
         List<TrainSchedule> returnSchedules = new ArrayList<>();
@@ -154,5 +215,36 @@ public class TrainScheduleDAO {
         long diffInMillies = Math.abs(arrivalDateTime.getTime() - departureDateTime.getTime());
         return diffInMillies / (1000 * 60);  // return time in minutes
     }
+    
+    public List<TrainSchedule> getSchedulesByStationAndDate(int stationID, Date travelDate) {
+        List<TrainSchedule> schedules = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                 "SELECT * FROM TrainSchedules WHERE originID = ? AND DATE(departureDateTime) = ?"
+             )) {
+            ps.setInt(1, stationID);
+            ps.setDate(2, new java.sql.Date(travelDate.getTime()));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TrainSchedule schedule = new TrainSchedule(
+                	rs.getInt("scheduleID"),
+                	rs.getInt("transitID"),
+                	rs.getInt("trainID"),
+                	rs.getInt("originID"),
+                	rs.getInt("destinationID"),
+                	rs.getTimestamp("departureDateTime"),
+                	rs.getTimestamp("arrivalDateTime"),
+                	rs.getFloat("fare"),
+                	rs.getInt("travelTime"),
+                	rs.getString("tripDirection")
+                	);
+                schedules.add(schedule);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return schedules;
+    }
+
 }
 

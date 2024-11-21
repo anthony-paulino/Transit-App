@@ -161,30 +161,75 @@ public class ReservationDAO {
 
         return results;
     }
+    
+    public List<Object[]> getReservationsByTransitLine(String transitLineName) {
+        String query = "SELECT DISTINCT " +
+                       "tl.transitLineName, " +
+                       "r.reservationID, " +
+                       "r.dateMade, " +
+                       "c.firstName, " +
+                       "c.lastName, " +
+                       "r.totalFare " +
+                       "FROM Reservations r " +
+                       "JOIN Tickets t ON r.reservationID = t.reservationID " +
+                       "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
+                       "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
+                       "JOIN Customers c ON r.customerID = c.customerID " +
+                       "WHERE tl.transitLineName = ? " +
+                       "ORDER BY r.reservationID";
 
-    public List<Object[]> getReservationsByCustomerName() {
-        String query = "SELECT DISTINCT CONCAT(c.firstName, ' ', c.lastName) AS customerName, " +
-                       "r.reservationID, r.dateMade, tl.transitLineName, r.totalFare " +
+        List<Object[]> results = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            // Set the transit line parameter
+            stmt.setString(1, transitLineName);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Object[] row = {
+                        rs.getString("transitLineName"),
+                        rs.getInt("reservationID"),
+                        rs.getDate("dateMade"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getBigDecimal("totalFare")
+                    };
+                    results.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
+
+    public List<Object[]> getReservationsByCustomerName(String customerName) {
+        String query = "SELECT DISTINCT c.username, r.reservationID, r.dateMade, tl.transitLineName, r.totalFare " +
                        "FROM Reservations r " +
                        "JOIN Customers c ON r.customerID = c.customerID " +
                        "JOIN Tickets t ON r.reservationID = t.reservationID " +
                        "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
                        "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
-                       "ORDER BY customerName, r.reservationID";
+                       "WHERE CONCAT(c.firstName, ' ', c.lastName) = ? " +
+                       "ORDER BY c.username, r.reservationID";
 
         List<Object[]> results = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, customerName);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Object[] row = {
-                    rs.getString("customerName"),
-                    rs.getInt("reservationID"),
-                    rs.getDate("dateMade"),
-                    rs.getString("transitLineName"),
-                    rs.getBigDecimal("totalFare")
+                    rs.getString("username"),       // Username
+                    rs.getInt("reservationID"),     // Reservation ID
+                    rs.getDate("dateMade"),         // Date Made
+                    rs.getString("transitLineName"),// Transit Line
+                    rs.getBigDecimal("totalFare")   // Fare
                 };
                 results.add(row);
             }
@@ -194,6 +239,5 @@ public class ReservationDAO {
 
         return results;
     }
-
 }
 

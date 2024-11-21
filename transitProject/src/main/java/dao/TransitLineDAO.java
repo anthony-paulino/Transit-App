@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransitLineDAO {
     
@@ -73,6 +75,23 @@ public class TransitLineDAO {
             e.printStackTrace();
         }
         return 0; // Default if no stops found
+    }
+    
+    public List<String> getAllTransitLineNames() {
+        List<String> transitLines = new ArrayList<>();
+        String query = "SELECT transitLineName FROM TransitLine ORDER BY transitLineName";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                transitLines.add(rs.getString("transitLineName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transitLines;
     }
 }
 

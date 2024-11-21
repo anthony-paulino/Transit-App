@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDAO {
    public Customer getCustomerByUsernameAndPassword(String username, String password) {
@@ -83,4 +85,25 @@ public class CustomerDAO {
        }
        return false;
    }
+   
+   public List<Object[]> getAllCustomers() {
+	    String query = "SELECT customerID, username, firstName, lastName FROM Customers ORDER BY lastName, firstName";
+	    List<Object[]> customers = new ArrayList<>();
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            Object[] customer = {
+	                rs.getInt("customerID"),
+	                rs.getString("username"),
+	                rs.getString("firstName"),
+	                rs.getString("lastName")
+	            };
+	            customers.add(customer);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return customers;
+	}
 }
