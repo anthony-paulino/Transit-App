@@ -29,24 +29,22 @@
             
             <!-- Action Buttons -->
             <div class="option-buttons">
-                <!-- Manage Reservations -->
-                <form action="manageReservations.jsp" method="get">
-                    <button type="submit" class="long-button">Manage Reservations</button>
-                </form>
-                
-                <!-- Manage Train Schedules -->
-                <form action="manageSchedules.jsp" method="get">
-                    <button type="submit" class="long-button">Manage Train Schedules</button>
-                </form>
-                
+           
                 <!-- Respond to Customer Questions -->
                 <form action="respondToCustomerQuestions.jsp" method="get">
                     <button type="submit" class="long-button">Respond to Customer Questions</button>
                 </form>
+                
+                 <!-- list of all customers who have reservations on a given transit line and date -->
+                <form action="repCustomerReservations.jsp" method="get">
+                    <button type="submit" class="long-button">Customer Reservations</button>
+                </form>
+                
                 <!-- List of Train Schedules For A Given Station -->
                 <form action="repScheduleByStation.jsp" method="get">
                     <button type="submit" class="long-button">List of Schedules For A Given Station</button>
                 </form>
+                
             </div>
         </div>
     </div>

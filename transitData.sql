@@ -3,7 +3,7 @@ INSERT INTO Customers (customerID, lastName, firstName, emailAddress, username, 
 (1, 'Doe', 'John', 'johndoe@example.com', 'johndoe', '123'),
 (2, 'Smith', 'Jane', 'janesmith@example.com', 'jane', '123'),
 (3, 'Johnson', 'Mark', 'markjohnson@example.com', 'mark', '123'),
-(4, 'Anthony', 'Paulino', 'anthonypaulino@example.com', 'ap2043', '123');
+(4, 'Paulino', 'Anthony', 'anthonypaulino@example.com', 'ap2043', '123');
 
 -- Insert Employees
 INSERT INTO Employees (employeeID, ssn, lastName, firstName, username, password, isAdmin) VALUES
@@ -343,7 +343,7 @@ INSERT INTO reservations (reservationID, customerID, dateMade, totalFare) VALUES
 (7,1,'2024-11-10',107.50),
 (8,1,'2024-11-16',126.00),
 (9,1,'2024-11-17',183.32),
-(27,1,'2024-11-21',100.00),
+
 -- customer 2
 (10,2,'2024-10-01',340.00),
 (11,2,'2024-10-14',86.00),

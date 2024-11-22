@@ -78,6 +78,7 @@ public class ReservationDAO {
         return false;
     }
 
+   // Delete a reservation 
     public boolean deleteReservation(int reservationID) {
         Connection conn = null;
         PreparedStatement deleteLinkedTicketsStmt = null;
@@ -122,46 +123,8 @@ public class ReservationDAO {
 
         return success;
     }
-    
-    public List<Object[]> getReservationsByTransitLine() {
-        String query = "SELECT DISTINCT " +
-                       "tl.transitLineName, " +
-                       "r.reservationID, " +
-                       "r.dateMade, " +
-                       "c.firstName, " +
-                       "c.lastName, " +
-                       "r.totalFare " +
-                       "FROM Reservations r " +
-                       "JOIN Tickets t ON r.reservationID = t.reservationID " +
-                       "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
-                       "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
-                       "JOIN Customers c ON r.customerID = c.customerID " +
-                       "ORDER BY tl.transitLineName, r.reservationID";
 
-        List<Object[]> results = new ArrayList<>();
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Object[] row = {
-                    rs.getString("transitLineName"),
-                    rs.getInt("reservationID"),
-                    rs.getDate("dateMade"),
-                    rs.getString("firstName"),
-                    rs.getString("lastName"),
-                    rs.getBigDecimal("totalFare")
-                };
-                results.add(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return results;
-    }
-    
+    // transit line names are unique, get reservation by transit line name (manager)
     public List<Object[]> getReservationsByTransitLine(String transitLineName) {
         String query = "SELECT DISTINCT " +
                        "tl.transitLineName, " +
@@ -206,6 +169,7 @@ public class ReservationDAO {
     }
 
 
+    // Get reservations by customer name "firstName + lastName" (manager)
     public List<Object[]> getReservationsByCustomerName(String customerName) {
         String query = "SELECT DISTINCT c.username, r.reservationID, r.dateMade, tl.transitLineName, r.totalFare " +
                        "FROM Reservations r " +
@@ -239,5 +203,226 @@ public class ReservationDAO {
 
         return results;
     }
+
+    // TODO: double check
+	public List<Object[]> getTopActiveTransitLines() {
+	    List<Object[]> lines = new ArrayList<>();
+	    String query = "SELECT tl.transitLineName, COALESCE(COUNT(r.reservationID), 0) AS NumberOfReservations " +
+	                   "FROM TransitLine tl " +
+	                   "LEFT JOIN Train_Schedules ts ON tl.transitID = ts.transitID " +
+	                   "LEFT JOIN Tickets t ON ts.scheduleID = t.scheduleID " +
+	                   "LEFT JOIN Reservations r ON t.reservationID = r.reservationID " +
+	                   "GROUP BY tl.transitLineName " +
+	                   "ORDER BY NumberOfReservations DESC, tl.transitLineName " +
+	                   "LIMIT 5";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            lines.add(new Object[]{rs.getString("transitLineName"), rs.getInt("NumberOfReservations")});
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return lines;
+	}
+
+	// Get the customer ordered by total reservations
+	public List<Object[]> getCustomersByMostReservations() {
+	    List<Object[]> results = new ArrayList<>();
+	    String query = "SELECT c.username, c.firstName, c.lastName, COUNT(r.reservationID) AS totalReservations " +
+	                   "FROM Reservations r " +
+	                   "JOIN Customers c ON r.customerID = c.customerID " +
+	                   "GROUP BY c.username, c.firstName, c.lastName " +
+	                   "ORDER BY totalReservations DESC";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            results.add(new Object[]{
+	                rs.getString("username"),
+	                rs.getString("firstName"),
+	                rs.getString("lastName"),
+	                rs.getInt("totalReservations")
+	            });
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return results;
+	}
+
+	// Get the customers ordered by total spent
+	public List<Object[]> getCustomersByTotalSpent() {
+	    List<Object[]> results = new ArrayList<>();
+	    String query = "SELECT c.username, c.firstName, c.lastName, SUM(r.totalFare) AS totalSpent " +
+	                   "FROM Reservations r " +
+	                   "JOIN Customers c ON r.customerID = c.customerID " +
+	                   "GROUP BY c.username, c.firstName, c.lastName " +
+	                   "ORDER BY totalSpent DESC";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            results.add(new Object[]{
+	                rs.getString("username"),
+	                rs.getString("firstName"),
+	                rs.getString("lastName"),
+	                rs.getBigDecimal("totalSpent")
+	            });
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return results;
+	}
+
+	// Get reservation and customer details by transit line name
+    /**public List<Object[]> getDetailsByTransitLine(String transitLine) {
+        List<Object[]> results = new ArrayList<>();
+        String query = "SELECT DISTINCT r.reservationID, c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
+                       "FROM Reservations r " +
+                       "JOIN Customers c ON r.customerID = c.customerID " +
+                       "JOIN Tickets t ON r.reservationID = t.reservationID " +
+                       "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
+                       "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
+                       "WHERE tl.transitLineName = ? " +
+                       "ORDER BY r.dateMade DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, transitLine);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("username"),
+                    rs.getString("firstName") + " " + rs.getString("lastName"),
+                    rs.getDate("dateMade"),
+                    rs.getBigDecimal("totalFare")
+                };
+                results.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }**/
+    
+    // Get reservation and customer details by customer name
+    public List<Object[]> getDetailsByCustomerName(String customerName) {
+        List<Object[]> results = new ArrayList<>();
+        String query = "SELECT c.username, CONCAT(c.firstName, ' ', c.lastName) AS fullName, r.dateMade, SUM(r.totalFare) AS totalFare " +
+                       "FROM Reservations r JOIN Customers c ON r.customerID = c.customerID " +
+                       "WHERE CONCAT(c.firstName, ' ', c.lastName) = ? " +
+                       "GROUP BY c.username, c.firstName, c.lastName, r.dateMade " +
+                       "ORDER BY r.dateMade DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, customerName);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getString("username"),
+                    rs.getString("fullName"),
+                    rs.getDate("dateMade"),
+                    rs.getBigDecimal("totalFare")
+                };
+                results.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    // TODO: move this to utils
+	public List<Integer> getSalesYears() {
+	    List<Integer> years = new ArrayList<>();
+	    String query = "SELECT DISTINCT YEAR(dateMade) as Year FROM Reservations ORDER BY Year DESC";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            years.add(rs.getInt("Year"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return years;
+	}
+
+    // TODO: move this to utils
+	public List<Object[]> getSalesByMonthAndYear(int year, int month) {
+	    List<Object[]> results = new ArrayList<>();
+	    String query = "SELECT c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
+	                   "FROM Reservations r " +
+	                   "JOIN Customers c ON r.customerID = c.customerID " +
+	                   "WHERE YEAR(r.dateMade) = ? AND MONTH(r.dateMade) = ? " +
+	                   "ORDER BY r.dateMade DESC";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        stmt.setInt(1, year);
+	        stmt.setInt(2, month);
+
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            Object[] row = {
+	                rs.getString("username"),
+	                rs.getString("firstName"),
+	                rs.getString("lastName"),
+	                rs.getDate("dateMade"),
+	                rs.getBigDecimal("totalFare")
+	            };
+	            results.add(row);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return results;
+	}
+
+	// Get reservations by transit line name and reservation made date 
+	/**
+	public List<Object[]> getCustomersByTransitLineAndDate(String transitLine, String reservationDate) {
+	    List<Object[]> customers = new ArrayList<>();
+	    String query = "SELECT DISTINCT r.reservationID, c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
+	                   "FROM Reservations r " +
+	                   "JOIN Customers c ON r.customerID = c.customerID " +
+	                   "JOIN Tickets t ON t.reservationID = r.reservationID " +
+	                   "JOIN Train_Schedules ts ON t.scheduleID = ts.scheduleID " +
+	                   "JOIN TransitLine tl ON ts.transitID = tl.transitID " +
+	                   "WHERE tl.transitLineName = ? AND DATE(r.dateMade) = ? " +
+	                   "ORDER BY r.dateMade, c.lastName, c.firstName";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        stmt.setString(1, transitLine);
+	        stmt.setString(2, reservationDate);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	                Object[] row = {
+	                    rs.getString("username"),
+	                    rs.getString("firstName") + " " + rs.getString("lastName"),
+	                    rs.getDate("dateMade"),
+	                    rs.getBigDecimal("totalFare")
+	                };
+	                customers.add(row);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return customers;
+	}
+
+**/
 }
 

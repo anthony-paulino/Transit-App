@@ -41,6 +41,26 @@
 			<form action="reservationsByCustomer.jsp" method="get">
 			    <button type="submit" class="long-button">View Reservations by Customer Name</button>
 			</form>
+			
+			<!-- Obtain sales reports per month -->
+			<form action="salesReports.jsp" method="get">
+			    <button type="submit" class="long-button">Sales Reports</button>
+			</form>
+
+			<!-- Obtain list of revenue per transit line or customer name -->
+			<form action="revenueReports.jsp" method="get">
+			    <button type="submit" class="long-button">Revenue Reports</button>
+			</form>
+
+			<!-- Best Customer -->
+			<form action="bestCustomer.jsp" method="get">
+			    <button type="submit" class="long-button">Best Customer Leaderboard</button>
+			</form>
+
+			<!-- Best 5 most active transit lines -->
+			<form action="bestTransitLine.jsp" method="get">
+			    <button type="submit" class="long-button">Most Active Transit Lines</button>
+			</form>
         </div>
     </div>
 </body>
