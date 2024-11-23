@@ -207,7 +207,7 @@ public class ReservationDAO {
     // TODO: double check
 	public List<Object[]> getTopActiveTransitLines() {
 	    List<Object[]> lines = new ArrayList<>();
-	    String query = "SELECT tl.transitLineName, COALESCE(COUNT(r.reservationID), 0) AS NumberOfReservations " +
+	    String query = "SELECT tl.transitLineName, COALESCE(COUNT(DISTINCT r.reservationID), 0) AS NumberOfReservations " +
 	                   "FROM TransitLine tl " +
 	                   "LEFT JOIN Train_Schedules ts ON tl.transitID = ts.transitID " +
 	                   "LEFT JOIN Tickets t ON ts.scheduleID = t.scheduleID " +

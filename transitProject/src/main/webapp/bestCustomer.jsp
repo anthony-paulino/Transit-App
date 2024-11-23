@@ -36,7 +36,7 @@
         <form action="bestCustomer.jsp" method="get" class="filter-form">
             <select name="filter" onchange="this.form.submit()">
                 <option value="totalSpent" <%= "totalSpent".equals(filter) ? "selected" : "" %>>Most Total Amount Spent</option>
-                <option value="totalReservations" <%= "totalReservations".equals(filter) ? "selected" : "" %>>Most Tickets/Reservations Bought</option>
+                <option value="totalReservations" <%= "totalReservations".equals(filter) ? "selected" : "" %>>Most Reservations Made</option>
             </select>
         </form>
         <div class="table-container">
