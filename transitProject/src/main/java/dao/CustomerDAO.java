@@ -106,4 +106,20 @@ public class CustomerDAO {
 	    }
 	    return customers;
 	}
+   
+   public List<String> getAllCustomerNames() {
+	    List<String> names = new ArrayList<>();
+	    String query = "SELECT DISTINCT firstName, lastName FROM Customers ORDER BY lastName, firstName";
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
+	        while (rs.next()) {
+	            names.add(rs.getString("firstName") + " " + rs.getString("lastName"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return names;
+	}
+  
 }

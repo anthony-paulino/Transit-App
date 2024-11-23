@@ -281,7 +281,7 @@ public class ReservationDAO {
 	}
 
 	// Get reservation and customer details by transit line name
-    /**public List<Object[]> getDetailsByTransitLine(String transitLine) {
+    public List<Object[]> getDetailsByTransitLine(String transitLine) {
         List<Object[]> results = new ArrayList<>();
         String query = "SELECT DISTINCT r.reservationID, c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
                        "FROM Reservations r " +
@@ -310,7 +310,7 @@ public class ReservationDAO {
             e.printStackTrace();
         }
         return results;
-    }**/
+    }
     
     // Get reservation and customer details by customer name
     public List<Object[]> getDetailsByCustomerName(String customerName) {
@@ -340,7 +340,7 @@ public class ReservationDAO {
         return results;
     }
 
-    // TODO: move this to utils
+    // Get the unique sale years in which reservations were made
 	public List<Integer> getSalesYears() {
 	    List<Integer> years = new ArrayList<>();
 	    String query = "SELECT DISTINCT YEAR(dateMade) as Year FROM Reservations ORDER BY Year DESC";
@@ -357,7 +357,7 @@ public class ReservationDAO {
 	    return years;
 	}
 
-    // TODO: move this to utils
+    // Get the reservations by month and year
 	public List<Object[]> getSalesByMonthAndYear(int year, int month) {
 	    List<Object[]> results = new ArrayList<>();
 	    String query = "SELECT c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
@@ -389,7 +389,6 @@ public class ReservationDAO {
 	}
 
 	// Get reservations by transit line name and reservation made date 
-	/**
 	public List<Object[]> getCustomersByTransitLineAndDate(String transitLine, String reservationDate) {
 	    List<Object[]> customers = new ArrayList<>();
 	    String query = "SELECT DISTINCT r.reservationID, c.username, c.firstName, c.lastName, r.dateMade, r.totalFare " +
@@ -422,7 +421,6 @@ public class ReservationDAO {
 	    }
 	    return customers;
 	}
-
-**/
+	
 }
 

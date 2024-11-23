@@ -988,4 +988,363 @@ body {
     color: #333;
 }
 
+/* Sales Report Specific Styles */
+.sales-report-container {
+    margin-top: 70px; /* Ensures spacing from the fixed navbar */
+    width: 95%; /* Responsive width */
+    max-width: 1100px; /* Maximum container width */
+    background: #FFF; /* White background for the content */
+    padding: 20px 40px; /* Padding around the content */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1); /* Soft shadow for depth */
+    border-radius: 8px; /* Rounded corners for the container */
+}
+
+.sales-report-container h2 {
+    margin-bottom: 30px; /* Space below the header */
+    color: #333; /* Dark grey color for text */
+    font-size: 24px; /* Larger font size for visibility */
+}
+
+/* Styling for forms in the sales report container */
+.sales-report-container form {
+    margin-bottom: 20px; /* Space below the form */
+    display: flex; /* Flexbox for inline elements */
+    justify-content: center; /* Center form elements horizontally */
+    align-items: center; /* Align form elements vertically */
+    gap: 15px; /* Space between form elements */
+}
+
+.sales-report-container select, .sales-report-container button {
+    padding: 10px; /* Padding inside the select box and button */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 5px; /* Rounded edges for select box and button */
+    background: #f8f8f8; /* Light grey background */
+    cursor: pointer; /* Cursor pointer for clickable items */
+}
+
+.sales-report-container button {
+    background-color: #4CAF50; /* Green background for buttons */
+    color: white; /* White text for buttons */
+    font-weight: bold; /* Bold font for button text */
+}
+
+.sales-report-container button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Styling for the sales data table */
+.sales-report-container table {
+    width: 100%; /* Full width of the container */
+    border-collapse: collapse; /* Collapse borders */
+    margin-top: 20px; /* Margin top for spacing */
+}
+
+.sales-report-container th, .sales-report-container td {
+    text-align: left; /* Align text to the left */
+    padding: 12px 15px; /* Padding inside table cells */
+    border: 1px solid #ddd; /* Light grey border for cells */
+}
+
+.sales-report-container th {
+    background-color: #333; /* Dark background for header */
+    color: white; /* White text for header */
+}
+
+.sales-report-container td {
+    background-color: #fafafa; /* Very light grey for data rows */
+}
+
+.sales-report-container tr:nth-child(even) td {
+    background-color: #f5f5f5; /* Alternating row color */
+}
+
+.sales-report-container .total-row {
+    background-color: #444; /* Darker background for total row */
+    color: black; /* White text for contrast */
+    font-weight: bold; /* Bold text for emphasis */
+}
+
+
+/* Most Active Transit Lines Styles */
+.transit-lines-container {
+    margin-top: 80px; /* Provides enough space from the navbar */
+    padding: 20px; /* Padding for aesthetic spacing */
+    background-color: #FFF; /* Clean, white background for focus */
+    border-radius: 10px; /* Smoothed corners for a softer look */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    width: 95%; /* Responsive width */
+    max-width: 900px; /* Max width for better table presentation */
+    text-align: center; /* Center aligns the text for better focus */
+}
+
+.transit-lines-container h2 {
+    margin-bottom: 20px; /* Space below the heading for separation */
+    color: #333; /* Dark color for strong visibility */
+    font-size: 24px; /* Large size for clear readability */
+}
+
+/* Table styles specific to transit lines leaderboard */
+.transit-lines-container table {
+    width: 100%; /* Full width to use available space */
+    border-collapse: collapse; /* Clean look by collapsing borders */
+    margin-top: 10px; /* Space above table to separate from text */
+}
+
+.transit-lines-container th,
+.transit-lines-container td {
+    padding: 12px; /* Comfortable padding inside cells */
+    border: 1px solid #ddd; /* Light grey border for subtle separation */
+    text-align: left; /* Aligns text to the left for consistency */
+}
+
+.transit-lines-container th {
+    background-color: #333; /* Dark background for headers for contrast */
+    color: white; /* White text for readability */
+}
+
+.transit-lines-container td {
+    background-color: #fafafa; /* Light grey background for data cells */
+}
+
+.transit-lines-container tr:nth-child(even) td {
+    background-color: #f0f0f0; /* Alternating row color for easy reading */
+}
+
+/* Adjustments for the navigation back to dashboard */
+.transit-lines-container .navbar {
+    background-color: #333; /* Ensures consistent nav bar color across pages */
+    color: white; /* Maintains legibility */
+    padding: 10px 15px; /* Optimal padding for size and comfort */
+    width: 100%; /* Full width to cover the top */
+    text-align: left; /* Aligns text to the left for traditional readability */
+}
+
+.transit-lines-container .navbar a {
+    color: white; /* Ensures links are visible against the dark background */
+    text-decoration: none; /* Removes underline from links */
+    font-weight: bold; /* Emphasizes the link for importance */
+}
+
+.transit-lines-container .navbar a:hover {
+    background-color: #555; /* Darker on hover for interactive feedback */
+}
+
+
+
+/* Revenue Report Specific Styles */
+.revenue-report-container {
+    margin-top: 70px; /* Consistent top margin with other pages */
+    padding: 20px;
+    background-color: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    width: 95%;
+    max-width: 1100px; /* Consistent with the sales report for uniformity */
+    text-align: center;
+}
+
+.revenue-report-container h2 {
+    margin-bottom: 30px; /* Provides spacing under the header */
+    color: #333;
+    font-size: 24px; /* Increases readability */
+}
+
+/* Styling for dropdown forms in the revenue report container */
+.revenue-report-container form {
+    margin-bottom: 20px; /* Provides spacing under the form */
+    display: flex; /* Aligns form items inline */
+    justify-content: center; /* Centers the form items horizontally */
+    gap: 10px; /* Provides spacing between form items */
+}
+
+.revenue-report-container select,
+.revenue-report-container button {
+    padding: 10px; /* Comfortable clicking area */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 5px; /* Rounded corners */
+    background: #f8f8f8; /* Off white background */
+    cursor: pointer; /* Indicates an interactive element */
+}
+
+.revenue-report-container button {
+    background-color: #4CAF50; /* Primary button color */
+    color: white; /* Text color for contrast */
+}
+
+.revenue-report-container button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+
+/* Table styling for revenue report */
+.revenue-report-container table {
+    width: 100%; /* Uses full container width */
+    border-collapse: collapse; /* Removes double borders */
+    margin-top: 20px; /* Spacing above the table */
+}
+
+.revenue-report-container th, 
+.revenue-report-container td {
+    padding: 12px; /* Spacing inside table cells */
+    border: 1px solid #ddd; /* Light grey border for readability */
+    text-align: left; /* Aligns text to the left within cells */
+}
+
+.revenue-report-container th {
+    background-color: #333; /* Dark background for headers */
+    color: white; /* White text for contrast */
+}
+
+.revenue-report-container td {
+    background-color: #fafafa; /* Very light grey for table cells */
+}
+
+.revenue-report-container tr:nth-child(even) td {
+    background-color: #f5f5f5; /* Alternating row color for readability */
+}
+
+.revenue-report-container .total-row {
+    background-color: #444; /* Dark grey for total row */
+    color: white; /* White for contrast */
+    font-weight: bold; /* Emphasizes the total */
+}
+
+
+
+/* Best Customers Leaderboard Specific Styles */
+.customer-leaderboard-container {
+    margin-top: 80px; /* Space from top considering navbar */
+    padding: 20px;
+    background-color: #FFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 95%;
+    max-width: 800px; /* Optimized for wider tables */
+    text-align: center;
+    align-self: center; /* Centers the container on the page */
+}
+
+.customer-leaderboard-container h2 {
+    margin-bottom: 20px; /* Spacing under the title */
+    color: #333;
+    font-size: 24px; /* Clear visibility */
+}
+
+/* Form styling for filter dropdown */
+.customer-leaderboard-container .filter-form {
+    margin-bottom: 20px; /* Spacing below the form */
+    display: flex; /* Inline elements */
+    justify-content: center; /* Center align the form items */
+    gap: 10px; /* Spacing between elements */
+}
+
+.customer-leaderboard-container select {
+    padding: 10px; /* Padding for easy interaction */
+    border: 1px solid #ccc; /* Borders for definition */
+    border-radius: 5px; /* Rounded borders */
+    background: #f8f8f8; /* Light background for contrast */
+    cursor: pointer; /* Indicates interactivity */
+}
+
+.customer-leaderboard-container table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Clean table look */
+    margin-top: 10px; /* Space before the table */
+}
+
+.customer-leaderboard-container th, 
+.customer-leaderboard-container td {
+    padding: 12px; /* Adequate padding for content */
+    border: 1px solid #ddd; /* Subtle border styling */
+    text-align: left; /* Aligns content to the left */
+}
+
+.customer-leaderboard-container th {
+    background-color: #333; /* Dark background for headers */
+    color: white; /* Contrast for readability */
+}
+
+.customer-leaderboard-container td {
+    background-color: #fafafa; /* Lighter for content rows */
+}
+
+.customer-leaderboard-container tr:nth-child(even) td {
+    background-color: #f0f0f0; /* Zebra striping for rows */
+}
+
+
+/* Specific styling for the repCustomerReservations page */
+.rep-customer-reservations-container {
+    margin-top: 80px; /* Space from the navbar */
+    padding: 20px;
+    background-color: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 1000px; /* Appropriate for table and forms */
+    text-align: center;
+    align-self: center; /* Centers container in the view */
+}
+
+.rep-customer-reservations-container h2 {
+    margin-bottom: 20px; /* Space below the header */
+    color: #333;
+    font-size: 24px; /* Visibility and emphasis */
+}
+
+/* Forms and selection styling in rep customer reservations */
+.rep-customer-reservations-container form {
+    margin-bottom: 20px; /* Space below the form */
+    display: flex;
+    justify-content: center; /* Centering form contents */
+    gap: 10px; /* Space between elements */
+    flex-wrap: wrap; /* Wrap elements in smaller screens */
+}
+
+.rep-customer-reservations-container select,
+.rep-customer-reservations-container input[type="date"],
+.rep-customer-reservations-container button {
+    padding: 8px; /* Padding for better interaction */
+    border: 1px solid #ccc; /* Subtle border for definition */
+    border-radius: 5px; /* Rounded corners for aesthetics */
+    background: #f8f8f8; /* Light background for elements */
+    cursor: pointer; /* Pointer to indicate clickable areas */
+}
+
+.rep-customer-reservations-container button {
+    background-color: #4CAF50; /* Consistent green for actions */
+    color: white; /* Text color for readability */
+    font-weight: bold; /* Bold to denote action */
+}
+
+.rep-customer-reservations-container button:hover {
+    background-color: #45a049; /* Darker green on hover for feedback */
+}
+
+/* Table styling for reservation details */
+.rep-customer-reservations-container table {
+    width: 100%; /* Full width for comprehensive data display */
+    border-collapse: collapse; /* Neat table borders */
+    margin-top: 20px; /* Spacing before table starts */
+}
+
+.rep-customer-reservations-container th, 
+.rep-customer-reservations-container td {
+    padding: 12px; /* Comfortable padding for data */
+    border: 1px solid #ddd; /* Clear definition of cells */
+    text-align: left; /* Data alignment for readability */
+}
+
+.rep-customer-reservations-container th {
+    background-color: #333; /* Header background for distinction */
+    color: white; /* Text color for clarity */
+}
+
+.rep-customer-reservations-container td {
+    background-color: #fafafa; /* Light background for data rows */
+}
+
+.rep-customer-reservations-container tr:nth-child(even) td {
+    background-color: #f0f0f0; /* Alternating row colors for better legibility */
+}
+
 

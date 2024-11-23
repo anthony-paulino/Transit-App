@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, dao.ReservationDAO, java.math.BigDecimal, java.text.SimpleDateFormat" %>
+<%@ page import="java.util.*, dao.CustomerDAO, dao.ReservationDAO, dao.TransitLineDAO, java.math.BigDecimal, java.text.SimpleDateFormat" %>
 <%
     String role = (String) session.getAttribute("role");
     if (role == null || !"manager".equals(role)) {
@@ -8,6 +8,8 @@
     }
 
     ReservationDAO reservationDAO = new ReservationDAO();
+    TransitLineDAO transitLineDAO = new TransitLineDAO();
+    CustomerDAO customerDAO = new CustomerDAO();
     String action = request.getParameter("action");
     String selectedItem = request.getParameter("selectedItem");
     String submit = request.getParameter("submit"); // New parameter to check if the 'Show Report' button was pressed
@@ -23,9 +25,9 @@
     }
 
     if ("Transit Line Revenue".equals(action)) {
-        dropdownItems = reservationDAO.getAllTransitLines();
+        dropdownItems = transitLineDAO.getAllTransitLineNames();
     } else if ("Customer Revenue".equals(action)) {
-        dropdownItems = reservationDAO.getAllCustomerNames();
+        dropdownItems = customerDAO.getAllCustomerNames();
     }
 %>
 <!DOCTYPE html>

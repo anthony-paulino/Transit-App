@@ -23,14 +23,12 @@
     Date now = new Date();
     
     for (Reservation reservation : reservations) {
-        System.out.println("--" + reservation.getReservationID() + "--");
         List<Ticket> tickets = ticketDAO.getTicketsByReservationID(reservation.getReservationID());
         boolean isPast = false;
 
         for (Ticket ticket : tickets) {       	        	
             if ("roundTrip".equals(ticket.getTripType()) && ticket.getLinkedTicketID() != null) {
                 // Check return ticket for round trips
-               	System.out.println(ticket.getLinkedTicketID());
                 Ticket incomingTicket = ticketDAO.getLinkedTicket(ticket.getLinkedTicketID());
                 Date departureTime = stopsAtDAO.getDepartureTimeForStation(incomingTicket.getScheduleID(), incomingTicket.getOriginID());
                 if (departureTime.before(now)) {
