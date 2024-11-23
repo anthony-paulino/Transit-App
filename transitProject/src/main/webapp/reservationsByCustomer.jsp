@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="dao.ReservationDAO, dao.CustomerDAO, java.util.List" %>
 <%
     // Check if user is logged in as a manager
@@ -49,8 +49,7 @@
             <select name="customerName" id="customerName" required>
                 <option value="">-- Select Customer --</option>
                 <% for (Object[] customer : customers) { %>
-                    <option value="<%= customer[2] + " " + customer[3] %>"
-                        <%= (selectedCustomerName != null && selectedCustomerName.equals(customer[2] + " " + customer[3])) ? "selected" : "" %>>
+                    <option value="<%= customer[2] + " " + customer[3] %>">
                         <%= customer[2] + " " + customer[3] %>
                     </option>
                 <% } %>
@@ -59,6 +58,7 @@
         </form>
 
         <!-- Display Results -->
+        <% if (selectedCustomerName != null && !selectedCustomerName.isEmpty()) { %>
         <div class="reservation-table-wrapper">
             <table>
                 <thead>
@@ -96,6 +96,8 @@
                 </tbody>
             </table>
         </div>
+        <% } %>
     </div>
 </body>
 </html>
+

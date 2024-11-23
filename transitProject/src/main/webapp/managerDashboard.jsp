@@ -33,6 +33,11 @@
             </form>
             
             <!-- Button to View Reservation By Transit Line-->
+            <form action="reservationBy.jsp" method="get">
+			    <button type="submit" class="long-button">View Reservations By</button>
+			</form>
+			
+            <!-- Button to View Reservation By Transit Line-->
             <form action="reservationsByTransitLine.jsp" method="get">
 			    <button type="submit" class="long-button">View Reservations by Transit Line</button>
 			</form>
