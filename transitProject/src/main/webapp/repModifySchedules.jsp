@@ -29,8 +29,8 @@
         boolean success = trainScheduleDAO.deleteTrainSchedule(scheduleID);
         message = success ? "Train Schedule deleted successfully." : "Failed to delete Train Schedule.";
     }
-    SimpleDateFormat f= new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
 
+    SimpleDateFormat f = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
 %>
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@
 </head>
 <body>
     <div class="modify-schedules-container">
-    	<div class="navbar">
+        <div class="navbar">
             <a href="managerDashboard.jsp">Back to Dashboard</a>
         </div>
         <h2>Manage Train Schedules</h2>
@@ -58,52 +58,54 @@
         <!-- Date Picker and Search -->
         <form action="repModifySchedules.jsp" method="get">
             <label for="selectedDate">Select Date:</label>
-            <input type="text" id="selectedDate" name="selectedDate" placeholder="YYYY-MM-DD" 
-                   value="<%= selectedDate != null ? selectedDate : "" %>" required>
+            <input type="text" id="selectedDate" name="selectedDate" placeholder="YYYY-MM-DD"
+                   value="<%= selectedDate != null ? selectedDate : "" %>">
             <button type="submit">Search</button>
         </form>
 
-        <!-- Train Schedules Table -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Transit Line</th>
-                    <th>Origin</th>
-                    <th>Destination</th>
-                    <th>Departure</th>
-                    <th>Arrival</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (trainSchedules != null && !trainSchedules.isEmpty()) { %>
-                    <% for (TrainSchedule schedule : trainSchedules) { %>
+        <% if (selectedDate != null && !selectedDate.isEmpty()) { %>
+            <!-- Train Schedules Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transit Line</th>
+                        <th>Origin</th>
+                        <th>Destination</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (trainSchedules != null && !trainSchedules.isEmpty()) { %>
+                        <% for (TrainSchedule schedule : trainSchedules) { %>
+                            <tr>
+                                <td><%= transitLineDAO.getTransitLineName(schedule.getTransitID()) %></td>
+                                <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
+                                <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
+                                <td><%= f.format(schedule.getDepartureDateTime()) %></td>
+                                <td><%= f.format(schedule.getArrivalDateTime()) %></td>
+                                <td>
+                                    <form action="repEditSchedule.jsp" method="get" style="display: inline;">
+                                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
+                                        <button type="submit">Edit</button>
+                                    </form>
+                                    <form action="repModifySchedules.jsp" method="post" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this schedule?');">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% } else { %>
                         <tr>
-                            <td><%= transitLineDAO.getTransitLineName(schedule.getTransitID()) %></td>
-                            <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
-                            <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
-                            <td><%= f.format(schedule.getDepartureDateTime()) %></td>
-                            <td><%= f.format(schedule.getArrivalDateTime()) %></td>
-                            <td>
-                                <form action="repEditSchedule.jsp" method="get" style="display: inline;">
-                                    <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
-                                    <button type="submit">Edit</button>
-                                </form>
-                                <form action="repModifySchedules.jsp" method="post" style="display: inline;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this schedule?');">Delete</button>
-                                </form>
-                            </td>
+                            <td colspan="6">No train schedules found for the selected date.</td>
                         </tr>
                     <% } %>
-                <% } else { %>
-                    <tr>
-                        <td colspan="6">No train schedules found for the selected date.</td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        <% } %>
     </div>
 
     <!-- Include Flatpickr Script -->
@@ -112,10 +114,10 @@
         document.addEventListener("DOMContentLoaded", () => {
             // Initialize Flatpickr for the date picker
             flatpickr("#selectedDate", {
-                dateFormat: "Y-m-d",
-                defaultDate: "<%= selectedDate != null ? selectedDate : "" %>"
+                dateFormat: "Y-m-d"
             });
         });
     </script>
 </body>
 </html>
+

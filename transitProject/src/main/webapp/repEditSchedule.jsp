@@ -80,6 +80,17 @@
 </head>
 <body>
     <div class="edit-schedule-container">
+    	<div class="navbar">
+            <a href="managerDashboard.jsp">Back to Dashboard</a>
+            <%
+        	String referer = request.getHeader("referer");
+            if (referer != null && !referer.isEmpty()) {
+		    %>
+		        <a href="<%= referer %>" class="back-to-schedule">Back to Schedule</a>
+		    <%
+		        }
+		    %>
+        </div>
         <h2>Edit Train Schedule</h2>
 
         <% if (message != null) { %>

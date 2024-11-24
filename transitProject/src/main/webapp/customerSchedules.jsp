@@ -87,10 +87,10 @@
 
                 <label for="travelDate">Travel Date:</label>
                 <input type="date" id="travelDate" name="travelDate" required>
-                <!--<script>
+                <script>
 				    const today = new Date().toISOString().split('T')[0];
 				    document.getElementById('travelDate').setAttribute('min', today);
-				</script>-->
+				</script>
 
                 <label for="sortBy">Sort By:</label>
                 <select name="sortBy" id="sortBy">

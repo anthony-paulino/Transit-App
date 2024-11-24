@@ -106,16 +106,16 @@ public class CustomerSupportDAO {
 
 	
 
-    // Method to get comments/replies for a specific question post
 	public List<CommentReply> getCommentsForQuestion(int questionID) {
 	    List<CommentReply> comments = new ArrayList<>();
 	    String query = "SELECT cr.commentID, cr.comment, cr.customerID, cr.employeeID, cr.datePosted, " +
 	                   "cu.username AS customerUsername, CONCAT(cu.firstName, ' ', cu.lastName) AS customerName, " +
 	                   "em.username AS employeeUsername, CONCAT(em.firstName, ' ', em.lastName) AS employeeName " +
 	                   "FROM CommentReply cr " +
+	                   "JOIN QuestionHasComment qhc ON cr.commentID = qhc.commentID " +
 	                   "LEFT JOIN Customers cu ON cr.customerID = cu.customerID " +
 	                   "LEFT JOIN Employees em ON cr.employeeID = em.employeeID " +
-	                   "WHERE cr.questionID = ? ORDER BY cr.datePosted ASC";
+	                   "WHERE qhc.questionID = ? ORDER BY cr.datePosted ASC";
 
 	    try (Connection conn = DatabaseConnection.getConnection();
 	         PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -158,46 +158,45 @@ public class CustomerSupportDAO {
 
     // Method to submit a new comment/reply
 	public boolean submitCommentReply(String comment, Integer customerID, Integer employeeID, int questionID) {
-	    String insertCommentQuery = "INSERT INTO CommentReply (comment, customerID, employeeID, questionID, datePosted) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
-	    String updateQuestionStatusQuery = "UPDATE QuestionPost SET status = ? WHERE questionID = ?";
+	    String insertCommentQuery = "INSERT INTO CommentReply (comment, customerID, employeeID, datePosted) VALUES (?, ?, ?, CURRENT_TIMESTAMP)";
+	    String insertQuestionCommentQuery = "INSERT INTO QuestionHasComment (questionID, commentID) VALUES (?, ?)";
 
 	    try (Connection conn = DatabaseConnection.getConnection();
-	         PreparedStatement insertStmt = conn.prepareStatement(insertCommentQuery);
-	         PreparedStatement updateStmt = conn.prepareStatement(updateQuestionStatusQuery)) {
+	         PreparedStatement commentStmt = conn.prepareStatement(insertCommentQuery, Statement.RETURN_GENERATED_KEYS);
+	         PreparedStatement questionCommentStmt = conn.prepareStatement(insertQuestionCommentQuery)) {
 
-	        // Insert the comment
-	        insertStmt.setString(1, comment);
+	        // Insert comment
+	        commentStmt.setString(1, comment);
 	        if (customerID != null) {
-	            insertStmt.setInt(2, customerID);
+	            commentStmt.setInt(2, customerID);
 	        } else {
-	            insertStmt.setNull(2, java.sql.Types.INTEGER);
+	            commentStmt.setNull(2, java.sql.Types.INTEGER);
 	        }
 	        if (employeeID != null) {
-	            insertStmt.setInt(3, employeeID);
+	            commentStmt.setInt(3, employeeID);
 	        } else {
-	            insertStmt.setNull(3, java.sql.Types.INTEGER);
+	            commentStmt.setNull(3, java.sql.Types.INTEGER);
 	        }
-	        insertStmt.setInt(4, questionID);
-	        insertStmt.executeUpdate();
+	        commentStmt.executeUpdate();
 
-	        
-	        // Update the question status
-	        if (employeeID != null) {
-	            // If the reply is made by an employee, mark as 'answered'
-	            updateStmt.setString(1, "answered");
-	        } else if (customerID != null) {
-	            // If the reply is made by a customer, mark as 'unanswered'
-	            updateStmt.setString(1, "unanswered");
+	        // Retrieve the generated commentID
+	        ResultSet rs = commentStmt.getGeneratedKeys();
+	        if (rs.next()) {
+	            int commentID = rs.getInt(1);
+
+	            // Insert into QuestionHasComment
+	            questionCommentStmt.setInt(1, questionID);
+	            questionCommentStmt.setInt(2, commentID);
+	            questionCommentStmt.executeUpdate();
 	        }
-	        updateStmt.setInt(2, questionID);
-	        updateStmt.executeUpdate();
 
 	        return true;
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        return false;
 	    }
-	    return false;
 	}
+
 
     
 	public List<QuestionPost> searchQuestionsByKeyword(String keyword, String filter) {
