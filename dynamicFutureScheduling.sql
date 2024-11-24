@@ -1,7 +1,7 @@
--- Step 2: Determine the current maximum scheduleID
+-- Step 1: Determine the current maximum scheduleID
 SET @currentMaxScheduleID = IFNULL((SELECT MAX(scheduleID) FROM Train_Schedules), 0);
 
--- Step 3: Populate Train Schedules for the next 14 days
+-- Step 2: Populate Train Schedules for the next 14 days
 INSERT INTO Train_Schedules (scheduleID, transitID, trainID, originID, destinationID, departureDateTime, arrivalDateTime, tripDirection)
 SELECT
     (@currentMaxScheduleID + (base_schedule.scheduleID * 100) + day_offset) AS scheduleID, -- Unique scheduleID
@@ -74,6 +74,7 @@ WHERE NOT EXISTS (
       AND ts.departureDateTime = DATE_ADD(base_schedule.departureDateTime, INTERVAL day_offset DAY)
 );
 
+-- Step 4: insert stops at data
 INSERT INTO Stops_At (scheduleID, stationID, stopNumber, arrivalDateTime, departureDateTime)
 SELECT
     sa.scheduleID,
