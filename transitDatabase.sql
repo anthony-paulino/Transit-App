@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Trains (
 
 -- Stations Table
 CREATE TABLE IF NOT EXISTS Stations (
-    stationID INT PRIMARY KEY,
+    stationID INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100),
     city VARCHAR(100),
     state VARCHAR(100)
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS Stations (
 
 -- TransitLine Table
 CREATE TABLE IF NOT EXISTS TransitLine (
-    transitID INT PRIMARY KEY,
-    transitLineName VARCHAR(100),
+    transitID INT PRIMARY KEY AUTO_INCREMENT,
+    transitLineName VARCHAR(100) UNIQUE,
     baseFare FLOAT,
     totalStops INT
 );
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS Employees (
 
 -- Train_Schedules Table 
 CREATE TABLE IF NOT EXISTS Train_Schedules (
-    scheduleID INT PRIMARY KEY,
+    scheduleID INT PRIMARY KEY AUTO_INCREMENT,
     transitID INT,
     trainID INT,
     originID INT,
@@ -135,4 +135,6 @@ CREATE TABLE IF NOT EXISTS QuestionHasComment (
     FOREIGN KEY (questionID) REFERENCES QuestionPost(questionID),
     FOREIGN KEY (commentID) REFERENCES CommentReply(commentID)
 );
+
+
 

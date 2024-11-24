@@ -1,4 +1,4 @@
-<%@ page import="java.util.*, dao.TrainScheduleDAO, dao.TransitLineDAO, dao.StationDAO, model.TrainSchedule" %>
+<%@ page import="java.text.SimpleDateFormat, java.util.*, dao.TrainScheduleDAO, dao.TransitLineDAO, dao.StationDAO, model.TrainSchedule" %>
 <%
     // Check if the user is logged in and has manager privileges
     String role = (String) session.getAttribute("role");
@@ -29,6 +29,8 @@
         boolean success = trainScheduleDAO.deleteTrainSchedule(scheduleID);
         message = success ? "Train Schedule deleted successfully." : "Failed to delete Train Schedule.";
     }
+    SimpleDateFormat f= new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -41,6 +43,9 @@
 </head>
 <body>
     <div class="modify-schedules-container">
+    	<div class="navbar">
+            <a href="managerDashboard.jsp">Back to Dashboard</a>
+        </div>
         <h2>Manage Train Schedules</h2>
 
         <!-- Toaster Notification -->
@@ -77,8 +82,8 @@
                             <td><%= transitLineDAO.getTransitLineName(schedule.getTransitID()) %></td>
                             <td><%= stationDAO.getStation(schedule.getOriginID()).getName() %></td>
                             <td><%= stationDAO.getStation(schedule.getDestinationID()).getName() %></td>
-                            <td><%= schedule.getDepartureDateTime() %></td>
-                            <td><%= schedule.getArrivalDateTime() %></td>
+                            <td><%= f.format(schedule.getDepartureDateTime()) %></td>
+                            <td><%= f.format(schedule.getArrivalDateTime()) %></td>
                             <td>
                                 <form action="repEditSchedule.jsp" method="get" style="display: inline;">
                                     <input type="hidden" name="scheduleID" value="<%= schedule.getScheduleID() %>">

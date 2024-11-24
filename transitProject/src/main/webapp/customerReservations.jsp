@@ -67,11 +67,9 @@
         <div class="customer-reservation-container">
             <h2>Your Reservations</h2>
             <p>View, open, and cancel your reservations below:</p>
-            <div class="filter-buttons">
-                <button onclick="showReservations('all')" class="filter-button">All Reservations</button>
-                <button onclick="showReservations('current')" class="filter-button">Current Reservations</button>
-                <button onclick="showReservations('past')" class="filter-button">Past Reservations</button>
-            </div>
+            <button onclick="showReservations('all')" >All Reservations</button>
+            <button onclick="showReservations('current')" >Current Reservations</button>
+            <button onclick="showReservations('past')" >Past Reservations</button>
 
             <% if (reservations.isEmpty()) { %>
                 <p>No reservations found.</p>
