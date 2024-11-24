@@ -32,21 +32,11 @@
                 <button type="submit" class="long-button">Manage Employees</button>
             </form>
             
-            <!-- Button to View Reservation By Transit Line-->
-            <form action="reservationBy.jsp" method="get">
+            <!-- Button to View Reservation By Transit Line or Customer Name-->
+            <form action="reservationsBy.jsp" method="get">
 			    <button type="submit" class="long-button">View Reservations By</button>
 			</form>
-			
-            <!-- Button to View Reservation By Transit Line-->
-            <form action="reservationsByTransitLine.jsp" method="get">
-			    <button type="submit" class="long-button">View Reservations by Transit Line</button>
-			</form>
-			
-			<!-- Button to View Reservation By Customer Name-->
-			<form action="reservationsByCustomer.jsp" method="get">
-			    <button type="submit" class="long-button">View Reservations by Customer Name</button>
-			</form>
-			
+	
 			<!-- Obtain sales reports per month -->
 			<form action="salesReports.jsp" method="get">
 			    <button type="submit" class="long-button">Sales Reports</button>

@@ -44,7 +44,7 @@
         <h2>View Reservations</h2>
 
         <!-- View Type Dropdown -->
-        <form action="reservationBy.jsp" method="get">
+        <form action="reservationsBy.jsp" method="get">
             <label for="viewType">View By:</label>
             <select name="viewType" id="viewType" onchange="this.form.submit()">
                 <option value="">-- Select View --</option>
@@ -55,7 +55,7 @@
 
         <% if ("customer".equals(viewType)) { %>
             <!-- Customer Name Dropdown -->
-            <form action="reservationBy.jsp" method="get">
+            <form action="reservationsBy.jsp" method="get">
                 <input type="hidden" name="viewType" value="customer">
                 <label for="selectedItem">Select Customer:</label>
                 <select name="selectedItem" id="selectedItem" required>
@@ -70,7 +70,7 @@
             </form>
         <% } else if ("transitLine".equals(viewType)) { %>
             <!-- Transit Line Dropdown -->
-            <form action="reservationBy.jsp" method="get">
+            <form action="reservationsBy.jsp" method="get">
                 <input type="hidden" name="viewType" value="transitLine">
                 <label for="selectedItem">Select Transit Line:</label>
                 <select name="selectedItem" id="selectedItem" required>

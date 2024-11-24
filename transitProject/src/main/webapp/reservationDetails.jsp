@@ -64,17 +64,19 @@
             document.getElementById("totalAmount").textContent = "$" + total.toFixed(2);
         }
 
-        // Function to lock trip types to "One-Way" if no round trips are available
+        // Function to lock trip types to "One-Way" if no round trips are available and no returning trip selected 
         function lockTripType() {
             const roundTripAvailable = <%= roundTripAvailable %>;
-
-            if (!roundTripAvailable) {
+			const returningScheduleID = <%= returningScheduleID %>;
+            if (!roundTripAvailable || returningScheduleID === -1 ) {
                 const tripTypes = ["adultTripType", "childTripType", "seniorTripType", "disabledTripType"];
                 tripTypes.forEach(id => {
                     const select = document.getElementById(id);
                     select.querySelectorAll('option[value="roundTrip"]').forEach(option => {
                         option.disabled = true;
                     });
+                 	// Set the selected value to "One-Way"
+                    select.value = "oneWay";
                 });
             }
         }
@@ -108,6 +110,15 @@
     <div class="dashboard-container">
         <div class="navbar">
             <a href="customerDashboard.jsp">Back to Dashboard</a>
+            <%
+	        // Check if the referer exists to generate the Back to Schedule button
+	        String referer = request.getHeader("referer");
+	        if (referer != null && !referer.isEmpty()) {
+		    %>
+		        <a href="<%= referer %>" class="back-to-schedule">Back to Schedule</a>
+		    <%
+		        }
+		    %>
         </div>
         <div class="reservation-details-container">
             <h2>Reservation Details</h2>
@@ -135,8 +146,8 @@
                             <td><input type="number" id="adultTickets" name="adultTickets" min="0" value="0" onchange="calculateTotal()"></td>
                             <td>
                                 <select id="adultTripType" name="adultTripType" onchange="calculateTotal()">
+                                	<option value="roundTrip">Round Trip</option>
                                     <option value="oneWay">One-Way</option>
-                                    <option value="roundTrip">Round Trip</option>
                                 </select>
                             </td>
                         </tr>
@@ -145,8 +156,8 @@
                             <td><input type="number" id="childTickets" name="childTickets" min="0" value="0" onchange="calculateTotal()"></td>
                             <td>
                                 <select id="childTripType" name="childTripType" onchange="calculateTotal()">
+                                	<option value="roundTrip">Round Trip</option>
                                     <option value="oneWay">One-Way</option>
-                                    <option value="roundTrip">Round Trip</option>
                                 </select>
                             </td>
                         </tr>
@@ -155,8 +166,8 @@
                             <td><input type="number" id="seniorTickets" name="seniorTickets" min="0" value="0" onchange="calculateTotal()"></td>
                             <td>
                                 <select id="seniorTripType" name="seniorTripType" onchange="calculateTotal()">
-                                    <option value="oneWay">One-Way</option>
-                                    <option value="roundTrip">Round Trip</option>
+                                	<option value="roundTrip">Round Trip</option>
+                                    <option value="oneWay">One-Way</option>                                    
                                 </select>
                             </td>
                         </tr>
@@ -165,8 +176,8 @@
                             <td><input type="number" id="disabledTickets" name="disabledTickets" min="0" value="0" onchange="calculateTotal()"></td>
                             <td>
                                 <select id="disabledTripType" name="disabledTripType" onchange="calculateTotal()">
+                                    <option value="roundTrip">Round Trip</option>                       
                                     <option value="oneWay">One-Way</option>
-                                    <option value="roundTrip">Round Trip</option>
                                 </select>
                             </td>
                         </tr>

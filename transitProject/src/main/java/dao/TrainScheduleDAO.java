@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,153 @@ public class TrainScheduleDAO {
         }
         return null;
     }
+
+    public TrainSchedule createTrainSchedule(
+	    int transitID, 
+	    int trainID, 
+	    int originID, 
+	    int destinationID, 
+	    Timestamp departureDateTime, 
+	    Timestamp arrivalDateTime, 
+	    String tripDirection
+	) {
+	    String query = "INSERT INTO Train_Schedules (transitID, trainID, originID, destinationID, departureDateTime, arrivalDateTime, tripDirection) "
+	                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+	        
+	        // Get base fare for the transit line
+	        float baseFare = transitLineDAO.getBaseFareByTransitID(transitID);
+
+	        // Calculate travel time in minutes
+	        long travelTime = calculateTravelTime(departureDateTime, arrivalDateTime);
+
+	        // Set parameters for the query
+	        stmt.setInt(1, transitID);
+	        stmt.setInt(2, trainID);
+	        stmt.setInt(3, originID);
+	        stmt.setInt(4, destinationID);
+	        stmt.setTimestamp(5, departureDateTime);
+	        stmt.setTimestamp(6, arrivalDateTime);
+	        stmt.setString(7, tripDirection);
+
+	        // Execute the query
+	        int rowsAffected = stmt.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            // Retrieve the generated scheduleID
+	            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+	                if (generatedKeys.next()) {
+	                    int scheduleID = generatedKeys.getInt(1); // Get the auto-generated key
+	                    // Return the TrainSchedule object with the generated scheduleID
+	                    return new TrainSchedule(
+	                        scheduleID, 
+	                        transitID, 
+	                        trainID, 
+	                        originID, 
+	                        destinationID, 
+	                        departureDateTime, 
+	                        arrivalDateTime, 
+	                        baseFare, 
+	                        travelTime, 
+	                        tripDirection
+	                    );
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return getTrainSchedule(300561);
+	    }
+	    return null; // Return null if an exception occurs or no rows are affected
+	}
+
+    // Add a new train schedule
+    public boolean addTrainSchedule(TrainSchedule schedule) {
+        String query = "INSERT INTO Train_Schedules (scheduleID, transitID, trainID, originID, destinationID, departureDateTime, arrivalDateTime, tripDirection) "
+                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, schedule.getScheduleID());
+            stmt.setInt(2, schedule.getTransitID());
+            stmt.setInt(3, schedule.getTrainID());
+            stmt.setInt(4, schedule.getOriginID());
+            stmt.setInt(5, schedule.getDestinationID());
+            stmt.setTimestamp(6, new java.sql.Timestamp(schedule.getDepartureDateTime().getTime()));
+            stmt.setTimestamp(7, new java.sql.Timestamp(schedule.getArrivalDateTime().getTime()));
+            stmt.setString(8, schedule.getTripDirection());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean updateTrainSchedule(int transitID, int trainID, int originID, int destinationID, java.sql.Timestamp departureDateTime, java.sql.Timestamp arrivalDateTime, String tripDirection, int scheduleID) {
+        String query = "UPDATE Train_Schedules SET transitID = ?, trainID = ?, originID = ?, destinationID = ?, "
+                     + "departureDateTime = ?, arrivalDateTime = ?, tripDirection = ? WHERE scheduleID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, transitID);
+            stmt.setInt(2, trainID);
+            stmt.setInt(3, originID);
+            stmt.setInt(4, destinationID);
+            stmt.setTimestamp(5, departureDateTime);
+            stmt.setTimestamp(6, arrivalDateTime);
+            stmt.setString(7, tripDirection);
+            stmt.setInt(8, scheduleID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean updateTrainSchedule(TrainSchedule trainSchedule) {
+        String query = "UPDATE Train_Schedules SET transitID = ?, trainID = ?, originID = ?, destinationID = ?, "
+                     + "departureDateTime = ?, arrivalDateTime = ?, tripDirection = ? WHERE scheduleID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, trainSchedule.getTransitID());
+            stmt.setInt(2, trainSchedule.getTrainID());
+            stmt.setInt(3, trainSchedule.getOriginID());
+            stmt.setInt(4, trainSchedule.getDestinationID());
+            stmt.setTimestamp(5, new java.sql.Timestamp(trainSchedule.getDepartureDateTime().getTime()));
+            stmt.setTimestamp(6, new java.sql.Timestamp(trainSchedule.getArrivalDateTime().getTime()));
+            stmt.setString(7, trainSchedule.getTripDirection());
+            stmt.setInt(8, trainSchedule.getScheduleID());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean deleteTrainSchedule(int scheduleID) {
+        String deleteStopsQuery = "DELETE FROM Stops_At WHERE scheduleID = ?";
+        String deleteScheduleQuery = "DELETE FROM Train_Schedules WHERE scheduleID = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement deleteStopsStmt = conn.prepareStatement(deleteStopsQuery);
+             PreparedStatement deleteScheduleStmt = conn.prepareStatement(deleteScheduleQuery)) {
+
+            // First, delete all stops associated with the schedule
+            deleteStopsStmt.setInt(1, scheduleID);
+            deleteStopsStmt.executeUpdate();
+
+            // Then, delete the schedule itself
+            deleteScheduleStmt.setInt(1, scheduleID);
+            int rowsAffected = deleteScheduleStmt.executeUpdate();
+
+            return rowsAffected > 0; // Return true if the schedule was successfully deleted
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public List<TrainSchedule> searchSchedules(int originID, int destinationID, Date travelDate) {
         List<TrainSchedule> schedules = new ArrayList<>();
@@ -154,7 +303,6 @@ public class TrainScheduleDAO {
         return schedules;
     }
 
-
     public List<TrainSchedule> availableOppositeDirectionSchedules(int transitID, Date afterDateTime, String tripDirection, int originID, int destinationID) { 
         List<TrainSchedule> returnSchedules = new ArrayList<>();
         // Determine opposite direction for return trip search
@@ -239,6 +387,61 @@ public class TrainScheduleDAO {
                 	rs.getString("tripDirection")
                 	);
                 schedules.add(schedule);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return schedules;
+    }
+    
+    public List<TrainSchedule> getAllUnreservedTrainSchedules(java.sql.Date date) {
+        List<TrainSchedule> schedules = new ArrayList<>();
+        String query = "SELECT DISTINCT ts.* " +
+                       "FROM reservations r " +
+                       "JOIN tickets t USING (reservationID) " +
+                       "RIGHT JOIN Train_Schedules ts ON ts.scheduleID = t.scheduleID " +
+                       "WHERE t.scheduleID IS NULL " + // Only include schedules without reservations
+                       "AND DATE(ts.departureDateTime) = ? " + // Filter schedules by the selected date
+                       "ORDER BY ts.departureDateTime ASC;";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+             
+            // Set the selected date in the query
+            stmt.setDate(1, new java.sql.Date(date.getTime()));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int transitID = rs.getInt("transitID");
+                    float baseFare = transitLineDAO.getBaseFareByTransitID(transitID);
+
+                    // Calculate fare and travel time
+                    float fare = calculateFare(
+                        baseFare,
+                        transitID,
+                        rs.getInt("scheduleID"),
+                        rs.getInt("originID"),
+                        rs.getInt("destinationID")
+                    );
+                    long travelTime = calculateTravelTime(
+                        rs.getTimestamp("departureDateTime"),
+                        rs.getTimestamp("arrivalDateTime")
+                    );
+
+                    TrainSchedule schedule = new TrainSchedule(
+                        rs.getInt("scheduleID"),
+                        transitID,
+                        rs.getInt("trainID"),
+                        rs.getInt("originID"),
+                        rs.getInt("destinationID"),
+                        rs.getTimestamp("departureDateTime"),
+                        rs.getTimestamp("arrivalDateTime"),
+                        fare,
+                        travelTime,
+                        rs.getString("tripDirection")
+                    );
+                    schedules.add(schedule);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

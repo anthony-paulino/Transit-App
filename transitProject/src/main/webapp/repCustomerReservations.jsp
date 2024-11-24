@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, dao.ReservationDAO" %>
+<%@ page import="java.util.*, dao.ReservationDAO, dao.TransitLineDAO" %>
 <%
     String role = (String) session.getAttribute("role");
     if (role == null || !"rep".equals(role)) {
@@ -8,8 +8,9 @@
     }
 
     ReservationDAO reservationDAO = new ReservationDAO();
+    TransitLineDAO transitLineDAO = new TransitLineDAO();
     List<Object[]> customers = null;
-    List<String> transitLines = reservationDAO.getAllTransitLines(); // Fetch all transit lines
+    List<String> transitLines = transitLineDAO.getAllTransitLineNames(); // Fetch all transit lines
     String transitLine = request.getParameter("transitLine");
     String reservationDate = request.getParameter("reservationDate");
 
@@ -31,8 +32,7 @@
     <div class="dashboard-container">
         <!-- Navbar -->
         <div class="navbar">
-            <a href="repDashboard.jsp">Home</a>
-            <a href="logout.jsp">Logout</a>
+            <a href="repDashboard.jsp">Back to Dashboard</a>
         </div>
 
         <!-- Content -->

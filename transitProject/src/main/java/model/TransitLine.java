@@ -14,6 +14,10 @@ public class TransitLine {
         this.totalStops = totalStops;
     }
 
+    public int getTotalStops() {
+    	return totalStops;
+    }
+    
     // Getters and Setters
     public int getTransitID() {
         return transitID;

@@ -195,6 +195,22 @@ body {
     background-color: #c9302c;
 }
 
+
+.customer-reservation-container button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.customer-reservation-container button:hover {
+    background-color: #45a049;
+}
+
+
 /* View Reservation Container */
 .view-reservation-container {
     background-color: #ffffff;
@@ -1343,6 +1359,247 @@ body {
 
 .rep-customer-reservations-container tr:nth-child(even) td {
     background-color: #f0f0f0; /* Alternating row colors for better legibility */
+}
+
+
+/* Toaster Notification Styles */
+        .toaster {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: fadeOut 3s forwards;
+        }
+        .toaster.success {
+            background-color: #28a745;
+        }
+        .toaster.error {
+            background-color: #dc3545;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+}
+
+.manage-schedule-container {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    padding: 50px;
+    margin: 20px auto;
+    border-radius: 8px;
+    max-width: 1000px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    align-self: center; /* Centers container in the view */
+}
+
+.manage-schedule-container h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.manage-schedule-container h3 {
+    font-size: 20px;
+    color: #555555;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.manage-schedule-container h4 {
+    font-size: 16px;
+    color: #444444;
+    margin-bottom: 10px;
+}
+
+.manage-schedule-container form {
+    margin-bottom: 20px;
+}
+
+.manage-schedule-container form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555555;
+}
+
+.manage-schedule-container form input[type="text"],
+.manage-schedule-container form input[type="number"],
+.manage-schedule-container form select {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.manage-schedule-container form button {
+    background-color: #0073e6;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.manage-schedule-container form button:hover {
+    background-color: #005bb5;
+}
+
+.manage-schedule-container .stops-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.manage-schedule-container .stops-container .stop {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.manage-schedule-container .toaster {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.manage-schedule-container .toaster.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.manage-schedule-container .toaster.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.manage-schedule-container .stop label {
+    display: inline-block;
+    width: 150px;
+    margin-bottom: 5px;
+}
+
+.manage-schedule-container .stop input[type="text"],
+.manage-schedule-container .stop select {
+    width: calc(100% - 160px);
+    padding: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.modify-schedules-container {
+	  max-width: 1000px;
+	  margin: 50px auto;
+	  background: #fff;
+	  padding: 20px;
+	  border-radius: 8px;
+	  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modify-schedules-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.modify-schedules-container form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.modify-schedules-container label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.modify-schedules-container input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+}
+
+.modify-schedules-container button {
+    padding: 8px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modify-schedules-container button:hover {
+    background-color: #0056b3;
+}
+
+.modify-schedules-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.modify-schedules-container th, td {
+    text-align: left;
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.modify-schedules-container th {
+    background-color: #007bff;
+    color: white;
+}
+
+.modify-schedules-container tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.modify-schedules-container tr:hover {
+    background-color: #f1f1f1;
+}
+
+.modify-schedules-container td form {
+    display: inline;
+}
+
+.modify-schedules-container td button {
+    margin-right: 5px;
+    padding: 5px 10px;
+}
+
+.modify-schedules-container td button:first-of-type {
+    background-color: #28a745;
+}
+
+.modify-schedules-container td button:first-of-type:hover {
+    background-color: #218838;
+}
+
+.modify-schedules-container td button:last-of-type {
+    background-color: #dc3545;
+}
+
+.modify-schedules-container td button:last-of-type:hover {
+    background-color: #c82333;
 }
 
 
