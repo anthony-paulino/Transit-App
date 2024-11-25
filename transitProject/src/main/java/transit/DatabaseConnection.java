@@ -38,7 +38,7 @@ public class DatabaseConnection {
 			//Create a connection to your DB
 			connection = DriverManager.getConnection(connectionUrl,user, password);
 			System.out.println("Connection established.");
-            //executeSqlFile(connection);
+            executeSqlFile(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
