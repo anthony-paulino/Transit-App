@@ -14,6 +14,13 @@
     // Retrieve the selected date from the request
     String selectedDate = request.getParameter("selectedDate");
 
+    if (selectedDate != null && !selectedDate.isEmpty()) {
+        session.setAttribute("selectedDate", selectedDate);
+    } else {
+        // Retrieve the previously selected date from the session
+        selectedDate = (String) session.getAttribute("selectedDate");
+    }
+    
     // Fetch train schedules based on the selected date
     List<TrainSchedule> trainSchedules = null;
     if (selectedDate != null && !selectedDate.isEmpty()) {

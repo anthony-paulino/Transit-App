@@ -3,10 +3,10 @@
 <%
    String role = (String) session.getAttribute("role");
    if (role == null || !"customer".equals(role)) {
-       response.sendRedirect("login.jsp"); // Redirect to login if not a customer
+       response.sendRedirect("login.jsp");
        return;
    }
-   
+
    SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");
 
    // DAOs
@@ -14,15 +14,39 @@
    TrainScheduleDAO scheduleDAO = new TrainScheduleDAO();
    TransitLineDAO transitLineDAO = new TransitLineDAO();
 
-   // Form parameters
+   // Retrieve search input parameters
    String originIDParam = request.getParameter("origin");
    String destinationIDParam = request.getParameter("destination");
    String travelDateParam = request.getParameter("travelDate");
    String sortBy = request.getParameter("sortBy");
 
-   List<TrainSchedule> schedules = new ArrayList<>();
+   // Persist search inputs in session
+   if (originIDParam != null) {
+       session.setAttribute("originID", originIDParam);
+   } else {
+       originIDParam = (String) session.getAttribute("originID");
+   }
 
-   // Fetch schedules if search criteria are provided
+   if (destinationIDParam != null) {
+       session.setAttribute("destinationID", destinationIDParam);
+   } else {
+       destinationIDParam = (String) session.getAttribute("destinationID");
+   }
+
+   if (travelDateParam != null) {
+       session.setAttribute("travelDate", travelDateParam);
+   } else {
+       travelDateParam = (String) session.getAttribute("travelDate");
+   }
+
+   if (sortBy != null) {
+       session.setAttribute("sortBy", sortBy);
+   } else {
+       sortBy = (String) session.getAttribute("sortBy");
+   }
+
+   // Fetch schedules based on inputs
+   List<TrainSchedule> schedules = new ArrayList<>();
    if (originIDParam != null && destinationIDParam != null && travelDateParam != null) {
        int originID = Integer.parseInt(originIDParam);
        int destinationID = Integer.parseInt(destinationIDParam);
@@ -30,26 +54,14 @@
 
        schedules = scheduleDAO.searchSchedules(originID, destinationID, travelDate);
 
-       // Sort schedules based on criteria selected
+       // Sort schedules based on criteria
        if (sortBy != null) {
            if (sortBy.equals("arrival")) {
-               schedules.sort(new Comparator<TrainSchedule>() {
-                   public int compare(TrainSchedule a, TrainSchedule b) {
-                       return a.getArrivalDateTime().compareTo(b.getArrivalDateTime());
-                   }
-               });
+               schedules.sort(Comparator.comparing(TrainSchedule::getArrivalDateTime));
            } else if (sortBy.equals("departure")) {
-               schedules.sort(new Comparator<TrainSchedule>() {
-                   public int compare(TrainSchedule a, TrainSchedule b) {
-                       return a.getDepartureDateTime().compareTo(b.getDepartureDateTime());
-                   }
-               });
+               schedules.sort(Comparator.comparing(TrainSchedule::getDepartureDateTime));
            } else if (sortBy.equals("fare")) {
-               schedules.sort(new Comparator<TrainSchedule>() {
-                   public int compare(TrainSchedule a, TrainSchedule b) {
-                       return Float.compare(a.getFare(), b.getFare());
-                   }
-               });
+               schedules.sort(Comparator.comparingDouble(TrainSchedule::getFare));
            }
        }
    }
@@ -74,29 +86,36 @@
                 <label for="origin">Origin:</label>
                 <select name="origin" id="origin" required>
                     <% for (Station station : stationDAO.getAllStations()) { %>
-                        <option value="<%= station.getStationID() %>"><%= station.getName() %></option>
+                        <option value="<%= station.getStationID() %>" 
+                            <%= originIDParam != null && originIDParam.equals(String.valueOf(station.getStationID())) ? "selected" : "" %>>
+                            <%= station.getName() %>
+                        </option>
                     <% } %>
                 </select>
 
                 <label for="destination">Destination:</label>
                 <select name="destination" id="destination" required>
                     <% for (Station station : stationDAO.getAllStations()) { %>
-                        <option value="<%= station.getStationID() %>"><%= station.getName() %></option>
+                        <option value="<%= station.getStationID() %>" 
+                            <%= destinationIDParam != null && destinationIDParam.equals(String.valueOf(station.getStationID())) ? "selected" : "" %>>
+                            <%= station.getName() %>
+                        </option>
                     <% } %>
                 </select>
 
                 <label for="travelDate">Travel Date:</label>
-                <input type="date" id="travelDate" name="travelDate" required>
+                <input type="date" id="travelDate" name="travelDate" 
+                       value="<%= travelDateParam != null ? travelDateParam : "" %>" required>
                 <script>
-				    const today = new Date().toISOString().split('T')[0];
-				    document.getElementById('travelDate').setAttribute('min', today);
-				</script>
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('travelDate').setAttribute('min', today);
+                </script>
 
                 <label for="sortBy">Sort By:</label>
                 <select name="sortBy" id="sortBy">
-                    <option value="arrival">Arrival Time</option>
-                    <option value="departure">Departure Time</option>
-                    <option value="fare">Fare</option>
+                    <option value="arrival" <%= "arrival".equals(sortBy) ? "selected" : "" %>>Arrival Time</option>
+                    <option value="departure" <%= "departure".equals(sortBy) ? "selected" : "" %>>Departure Time</option>
+                    <option value="fare" <%= "fare".equals(sortBy) ? "selected" : "" %>>Fare</option>
                 </select>
 
                 <button type="submit">Search</button>
@@ -152,3 +171,4 @@
     </div>
 </body>
 </html>
+

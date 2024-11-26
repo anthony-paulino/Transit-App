@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS Stops_At (
     FOREIGN KEY (stationID) REFERENCES Stations(stationID)
 );
 
--- Table to store questions posted by customers
+-- Table to store questions posted by customers with default status
 CREATE TABLE IF NOT EXISTS QuestionPost (
     questionID INT AUTO_INCREMENT PRIMARY KEY,
     question TEXT NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS QuestionPost (
     customerName VARCHAR(255),
     username VARCHAR(255),
     datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(225),
+    status VARCHAR(225) DEFAULT 'unanswered',  -- Setting default status to 'unanswered'
     FOREIGN KEY (customerID) REFERENCES Customers(customerID)
 );
 
@@ -122,19 +122,16 @@ CREATE TABLE IF NOT EXISTS CommentReply (
     comment TEXT NOT NULL,
     customerID INT,
     employeeID INT,
+    questionID INT, -- Direct reference to QuestionPost
     datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customerID) REFERENCES Customers(customerID),
-    FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE
+    FOREIGN KEY (employeeID) REFERENCES Employees(employeeID) ON DELETE CASCADE,
+    FOREIGN KEY (questionID) REFERENCES QuestionPost(questionID) -- Ensuring foreign key constraint
 );
 
--- Junction table to associate comments/replies with specific questions
-CREATE TABLE IF NOT EXISTS QuestionHasComment (
-    questionID INT,
-    commentID INT,
-    PRIMARY KEY (questionID, commentID),
-    FOREIGN KEY (questionID) REFERENCES QuestionPost(questionID),
-    FOREIGN KEY (commentID) REFERENCES CommentReply(commentID)
+CREATE TABLE Schedule_Generation_Log (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    last_generated_date DATE,
+    days_generated INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
-

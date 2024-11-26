@@ -44,24 +44,24 @@
             <h2>Train Schedules for a Station</h2>
 
             <!-- Search form -->
-            <form action="repScheduleByStation.jsp" method="get" class="search-form">
-                <label for="station">Station:</label>
-                <select name="station" id="station" required>
-                    <% for (Station station : stationDAO.getAllStations()) { %>
-                        <option value="<%= station.getStationID() %>"><%= station.getName() %></option>
-                    <% } %>
-                </select>
-
-                <label for="travelDate">Travel Date:</label>
-                <input type="date" id="travelDate" name="travelDate" required>
-                <!--<script>
-				    const today = new Date().toISOString().split('T')[0];
-				    document.getElementById('travelDate').setAttribute('min', today);
-				</script>-->
-
-                <button type="submit">Search</button>
-            </form>
-
+           <form action="repScheduleByStation.jsp" method="get" class="search-form">
+			    <label for="station">Station:</label>
+			    <select name="station" id="station" required>
+			        <% for (Station station : stationDAO.getAllStations()) { %>
+			            <option value="<%= station.getStationID() %>" 
+			                <%= stationIDParam != null && stationIDParam.equals(String.valueOf(station.getStationID())) ? "selected" : "" %>>
+			                <%= station.getName() %>
+			            </option>
+			        <% } %>
+			    </select>
+			
+			    <label for="travelDate">Travel Date:</label>
+			    <input type="date" id="travelDate" name="travelDate" 
+			           value="<%= travelDateParam != null ? travelDateParam : "" %>" required>
+			
+			    <button type="submit">Search</button>
+			</form>
+			
             <!-- Display search results -->
             <div class="results">
                 <h3>Search Results</h3>

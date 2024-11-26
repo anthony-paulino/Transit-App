@@ -38,7 +38,7 @@ public class DatabaseConnection {
 			//Create a connection to your DB
 			connection = DriverManager.getConnection(connectionUrl,user, password);
 			System.out.println("Connection established.");
-            executeSqlFile(connection);
+            //executeSqlFile(connection);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -121,7 +121,7 @@ public class DatabaseConnection {
 					        UNION ALL
 					        SELECT day_offset + 1
 					        FROM day_offsets
-					        WHERE day_offset + 1 < 14 -- Generate for 14 days
+					        WHERE day_offset + 1 < 3 -- Generate for 3 days
 					    )
 					    SELECT day_offset
 					    FROM day_offsets
@@ -364,7 +364,7 @@ public class DatabaseConnection {
 								UNION ALL
 								SELECT day_offset + 1
 								FROM day_offsets
-								WHERE day_offset + 1 < 14 -- Generate for 14 days
+								WHERE day_offset + 1 < 3 -- Generate for 3 days
 							)
 							SELECT day_offset
 							FROM day_offsets
