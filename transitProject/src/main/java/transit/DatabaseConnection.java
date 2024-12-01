@@ -1,14 +1,10 @@
 package transit;
 
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.sql.Connection;
 
 public class DatabaseConnection {
@@ -21,30 +17,22 @@ public class DatabaseConnection {
 		
 	}
 
-	public static Connection getConnection(){
-		
-		Connection connection = null;
-		try {
-			//Load JDBC driver - the interface standardizing the connection procedure. Look at WEB-INF\lib for a mysql connector jar file, otherwise it fails.
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			//Create a connection to your DB
-			connection = DriverManager.getConnection(connectionUrl,user, password);
-			System.out.println("Connection established.");
-            //executeSqlFile(connection);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return connection;
-		
-	}
+	public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            connection = DriverManager.getConnection(connectionUrl, user, password);
+            System.out.println("Connection established.");
+            checkAndRunScript(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
 	
 	public static void closeConnection(Connection connection){
 		try {
@@ -56,8 +44,40 @@ public class DatabaseConnection {
 		}
 	}
 	
+	public static void checkAndRunScript(Connection connection) {
+        LocalDate today = LocalDate.now();
+        try (Statement statement = connection.createStatement()) {
+            // Ensure the table exists
+            statement.execute("""
+                CREATE TABLE IF NOT EXISTS schedule_generate_log (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    last_execution_date DATE NOT NULL
+                );
+            """);
 
-	public static void executeSqlFile(Connection connection) {
+            // Check the last execution date
+            ResultSet rs = statement.executeQuery("SELECT MAX(last_execution_date) FROM schedule_generate_log;");
+            LocalDate lastExecutionDate = null;
+            if (rs.next() && rs.getDate(1) != null) {
+                lastExecutionDate = rs.getDate(1).toLocalDate();
+            }
+
+            // Decide whether to run the script
+            if (lastExecutionDate == null || lastExecutionDate.isBefore(today.minusDays(2))) {
+                System.out.println("Executing SQL script...");
+                executeSqlScript(connection);
+
+                // Log the execution date
+                statement.executeUpdate("INSERT INTO schedule_generate_log (last_execution_date) VALUES (CURRENT_DATE);");
+            } else {
+                System.out.println("Script not executed. Last execution was on: " + lastExecutionDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+	public static void executeSqlScript(Connection connection) {
 		
 	String script = """
 					-- Step 1: Determine the current maximum scheduleID

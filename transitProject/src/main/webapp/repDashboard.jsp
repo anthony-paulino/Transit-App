@@ -35,11 +35,6 @@
                     <button type="submit" class="long-button">Respond to Customer Questions</button>
                 </form>
                 
-                <!-- Manage Train Schedules -->
-                <form action="repAddSchedules.jsp" method="get">
-                    <button type="submit" class="long-button">Add Train Schedules</button>
-                </form>
-                
                 <form action="repModifySchedules.jsp" method="get">
                     <button type="submit" class="long-button">Modify Train Schedules</button>
                 </form>

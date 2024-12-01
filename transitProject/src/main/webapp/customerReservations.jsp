@@ -17,13 +17,15 @@
     List<Reservation> reservations = reservationDAO.getReservationsByCustomerID(customerID);
 
     // Create separate lists for past and current reservations
-    List<Reservation> pastReservations = new ArrayList<>();
+    List<Reservation> futureReservations = new ArrayList<>();
     List<Reservation> currentReservations = new ArrayList<>();
+    List<Reservation> pastReservations = new ArrayList<>();
 
     Date now = new Date();
     
     for (Reservation reservation : reservations) {
         List<Ticket> tickets = ticketDAO.getTicketsByReservationID(reservation.getReservationID());
+        boolean isCurrent = false;
         boolean isPast = false;
 
         for (Ticket ticket : tickets) {       	        	
@@ -31,24 +33,49 @@
                 // Check return ticket for round trips
                 Ticket incomingTicket = ticketDAO.getLinkedTicket(ticket.getLinkedTicketID());
                 Date departureTime = stopsAtDAO.getDepartureTimeForStation(incomingTicket.getScheduleID(), incomingTicket.getOriginID());
+                Date arrivalTime = stopsAtDAO.getArrivalTimeForStation(ticket.getScheduleID(), ticket.getDestinationID());
+
+                // Check if the depatureTime is before currentTime (curret time passed depatureTime)
                 if (departureTime.before(now)) {
+                    // If so, check if the arrivalTime is before CurrentTime (curret time passed arrivalTime)
+                	if(arrivalTime.before(now))
                     isPast = true;
                     break;
+                }
+                // depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
+                else{
+                	isCurrent = true;
+                	
                 }
             } else if ("oneWay".equals(ticket.getTripType())) {
                 // Check departure time for one-way tickets
                 Date departureTime = stopsAtDAO.getDepartureTimeForStation(ticket.getScheduleID(), ticket.getOriginID());
+                Date arrivalTime = stopsAtDAO.getArrivalTimeForStation(ticket.getScheduleID(), ticket.getDestinationID());
+
+                // Check if the depatureTime is before currentTime (curret time passed depatureTime)
                 if (departureTime.before(now)) {
+                    // If so, check if the arrivalTime is before CurrentTime (curret time passed arrivalTime)
+                	if(arrivalTime.before(now))
                     isPast = true;
                     break;
+                }
+                // depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
+                else{
+                	isCurrent = true;
+                	
                 }
            }
         }
 
         if (isPast) {
             pastReservations.add(reservation);
-        } else {
-            currentReservations.add(reservation);
+        
+        } 
+        else if (isCurrent){
+        	currentReservations.add(reservation);
+        }
+        else {
+            futureReservations.add(reservation);
         }
     }
 %>
@@ -68,7 +95,8 @@
             <h2>Your Reservations</h2>
             <p>View, open, and cancel your reservations below:</p>
             <button onclick="showReservations('all')" >All Reservations</button>
-            <button onclick="showReservations('current')" >Current Reservations</button>
+            <button onclick="showReservations('future')" >Future Reservations</button>
+            <button onclick="showReservations('ongoing')" >Current Reservations</button>
             <button onclick="showReservations('past')" >Past Reservations</button>
 
             <% if (reservations.isEmpty()) { %>
@@ -104,6 +132,38 @@
                         <% } %>
                     </tbody>
                 </table>
+                
+                <!-- Future Reservations Table -->
+                <table id="future-reservations" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Reservation ID</th>
+                            <th>Date Made</th>
+                            <th>Total Fare</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (Reservation reservation : futureReservations) { %>
+                            <tr>
+                                <td><%= reservation.getReservationID() %></td>
+                                <td><%= reservation.getDateMade() %></td>
+                                <td>$<%= reservation.getTotalFare() %></td>
+                                <td>
+                                    <form action="viewReservation.jsp" method="get">
+                                        <input type="hidden" name="reservationID" value="<%= reservation.getReservationID() %>">
+                                        <button type="submit" class="open-button">Open</button>
+                                    </form>
+                                    <form action="cancelReservation.jsp" method="post">
+                                        <input type="hidden" name="reservationID" value="<%= reservation.getReservationID() %>">
+                                        <button type="submit" class="cancel-button">Cancel</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                
 
                 <!-- Current Reservations Table -->
                 <table id="current-reservations" style="display: none;">
@@ -125,10 +185,6 @@
                                     <form action="viewReservation.jsp" method="get">
                                         <input type="hidden" name="reservationID" value="<%= reservation.getReservationID() %>">
                                         <button type="submit" class="open-button">Open</button>
-                                    </form>
-                                    <form action="cancelReservation.jsp" method="post">
-                                        <input type="hidden" name="reservationID" value="<%= reservation.getReservationID() %>">
-                                        <button type="submit" class="cancel-button">Cancel</button>
                                     </form>
                                 </td>
                             </tr>

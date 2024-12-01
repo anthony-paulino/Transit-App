@@ -267,6 +267,77 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Dropdown focus/hover effect */
+.customer-schedule-container select:hover,
+.customer-schedule-container select:focus {
+    border-color: #3498db; /* Change border color on hover/focus */
+    outline: none; /* Remove focus outline */
+}
+
+/* Dropdown container form styling */
+.customer-schedule-container .search-form {
+    display: flex;
+    flex-wrap: wrap; /* Make it responsive */
+    align-items: center; /* Center align items vertically */
+    justify-content: center; /* Center items horizontally */
+    gap: 15px; /* Spacing between form elements */
+    margin-bottom: 30px; /* Space below the form */
+}
+
+/* Style the label */
+.customer-schedule-container label {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Style the select dropdowns */
+.customer-schedule-container select {
+    appearance: none; /* Remove default browser styling */
+    background-color: #f9f9f9; /* Light background */
+    color: #333; /* Text color */
+    padding: 10px 20px; /* Padding for size */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    width: auto; /* Adjust width to content */
+    margin: 0 10px; /* Spacing between inputs */
+    transition: border-color 0.3s ease;
+}
+
+/* Style the submit button */
+.customer-schedule-container button[type="submit"] {
+    background-color: #28a745; /* Green button */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease;
+}
+
+.customer-schedule-container button[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Add styles for inputs */
+.customer-schedule-container input[type="date"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.customer-schedule-container input[type="date"]:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+
 /* Style for long navigation buttons in dashboard */
 .long-button {
     background-color: #4CAF50;
@@ -579,7 +650,7 @@ body {
 }
 
 /* Customer Service Container */
-.customer-service-container {
+.customer-schedule-container {
     margin-top: 70px;
     padding: 20px;
     background-color: #ffffff;
