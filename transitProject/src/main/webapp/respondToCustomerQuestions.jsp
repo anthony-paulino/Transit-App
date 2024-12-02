@@ -60,7 +60,7 @@
             <a href="logout.jsp">Logout</a>
         </div>
 
-        <div class="filter-section">
+        <div class="content">
 			<form action="respondToCustomerQuestions.jsp" method="get" class="filter-form">
 			    <label for="filter">Filter Questions:</label>
 			    <select name="filter" id="filter" onchange="this.form.submit()">
