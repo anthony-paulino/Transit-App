@@ -34,11 +34,45 @@ public class EmployeeDAO {
 	        e.printStackTrace();
 	    }
 	    return null;
+	} 
+    
+	public boolean isUsernameTaken(String username) {
+	    String query = """
+	        SELECT 1 FROM Customers WHERE username = ?
+	        UNION
+	        SELECT 1 FROM Employees WHERE username = ?
+	    """;
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+	        // Set the username parameter for both tables
+	        stmt.setString(1, username); // For Customers table
+	        stmt.setString(2, username); // For Employees table
+
+	        // Execute the query
+	        ResultSet rs = stmt.executeQuery();
+
+	        // Return true if there is a match
+	        return rs.next();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false; // Return false if an exception occurs or no match is found
+	}
+	
+	public boolean isSSNTaken(String ssn) {
+	    String query = "SELECT 1 FROM Employees WHERE ssn = ?";
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query)) {
+	        stmt.setString(1, ssn);
+	        ResultSet rs = stmt.executeQuery();
+	        return rs.next();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
 	}
 
-    
-    
-    // New code
 	public boolean addCustomerRep(Employee employee) {
 	    String query = "INSERT INTO Employees (firstName, lastName, username, password, ssn, isAdmin) VALUES (?, ?, ?, ?, ?, 0)";
 	    try (Connection conn = DatabaseConnection.getConnection();

@@ -2,16 +2,20 @@
 <%@ page import="model.Employee" %>
 <%@ page import="dao.EmployeeDAO" %>
 <%
-    // Check if user is logged in as a manager
+    // Check if the user is logged in as a manager
     String role = (String) session.getAttribute("role");
     if (role == null || !"manager".equals(role)) {
         response.sendRedirect("login.jsp");
         return;
     }
 
+    // Initialize DAOs and retrieve employee details
     int employeeID = Integer.parseInt(request.getParameter("employeeID"));
     EmployeeDAO employeeDAO = new EmployeeDAO();
     Employee employee = employeeDAO.getEmployeeById(employeeID); // Add this method in EmployeeDAO
+
+    // Initialize a message variable for success/error
+    String message = null;
 
     if ("update".equals(request.getParameter("action"))) {
         String fname = request.getParameter("fname");
@@ -20,17 +24,32 @@
         String password = request.getParameter("password");
         String ssn = request.getParameter("ssn");
 
-        employee.setFirstName(fname);
-        employee.setLastName(lname);
-        employee.setUsername(username);
-        employee.setPassword(password);
-        employee.setSsn(ssn);
+        // Check for duplicate username and SSN (excluding current employee)
+        boolean usernameTaken = employeeDAO.isUsernameTaken(username);
+        boolean ssnTaken = employeeDAO.isSSNTaken(ssn);
 
-        if (employeeDAO.updateCustomerRep(employee)) {
-            response.sendRedirect("manageEmployees.jsp?message=Employee updated successfully.");
-            return;
+        if (usernameTaken && !(employee.getUsername().equals(username)) ) {
+            message = "Error: Username is already taken.";
+        } else if (ssnTaken && !(employee.getSsn().equals(ssn))) {
+            message = "Error: SSN is already in use.";
         } else {
-            request.setAttribute("error", "Failed to update employee.");
+            // Update employee details
+            employee.setFirstName(fname);
+            employee.setLastName(lname);
+            employee.setUsername(username);
+            employee.setPassword(password);
+            employee.setSsn(ssn);
+
+            if (employeeDAO.updateCustomerRep(employee)) {
+                // Set success message
+                message = "Employee updated successfully.";
+
+                // Reload updated employee data
+                employee = employeeDAO.getEmployeeById(employeeID);
+            } else {
+                // Set error message
+                message = "Failed to update employee.";
+            }
         }
     }
 %>
@@ -41,15 +60,26 @@
     <title>Edit Employee</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // Display the toaster
-        function showToaster(message, type) {
-            const toaster = document.createElement('div');
-            toaster.className = `toaster ${type}`;
-            toaster.textContent = message;
-            document.body.appendChild(toaster);
-            toaster.style.display = "block";
+        // Display toaster
+        document.addEventListener("DOMContentLoaded", () => {
+            const toaster = document.querySelector(".toaster");
+            if (toaster) {
+                // Fade-in effect
+                setTimeout(() => {
+                    toaster.style.opacity = "1";
+                    toaster.style.transform = "translateY(0)";
+                }, 100);
 
-        }
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    toaster.style.opacity = "0";
+                    toaster.style.transform = "translateY(-20px)";
+                    setTimeout(() => {
+                        toaster.remove();
+                    }, 500);
+                }, 3000);
+            }
+        });
 
         // Client-side validation for SSN
         function validateSSN() {
@@ -58,7 +88,7 @@
             const ssnPattern = /^\d{3}-\d{2}-\d{4}$/; // SSN pattern XXX-XX-XXXX
 
             if (!ssnPattern.test(ssnValue)) {
-                showToaster("Invalid SSN format. Please use XXX-XX-XXXX.", "error");
+                alert("Invalid SSN format. Please use XXX-XX-XXXX.");
                 ssnInput.focus();
                 return false;
             }
@@ -84,16 +114,11 @@
         <!-- Page Title -->
         <h2>Edit Employee</h2>
 
-        <!-- Display Toaster for Errors -->
-        <% 
-            String error = (String) request.getAttribute("error");
-            if (error != null) { 
-        %>
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                    showToaster("<%= error %>", "error");
-                });
-            </script>
+        <!-- Display Toaster -->
+        <% if (message != null) { %>
+            <div class="toaster <%= message.contains("successfully") ? "success" : "error" %>">
+                <%= message %>
+            </div>
         <% } %>
 
         <!-- Edit Employee Form -->
@@ -122,7 +147,7 @@
             </div>
 
             <div class="form-group">
-                <label for="ssn">SSN:</label>
+                <label for="ssn">SSN (xxx-xx-xxxx):</label>
                 <input type="text" id="ssn" name="ssn" value="<%= employee.getSsn() %>" placeholder="XXX-XX-XXXX" required>
             </div>
 
@@ -131,17 +156,6 @@
             </div>
         </form>
     </div>
-
-    <!-- Toaster for Success -->
-    <%
-        String successMessage = request.getParameter("successMessage");
-        if (successMessage != null) {
-    %>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                showToaster("<%= successMessage %>", "success");
-            });
-        </script>
-    <% } %>
 </body>
 </html>
+

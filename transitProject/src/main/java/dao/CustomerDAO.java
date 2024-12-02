@@ -73,11 +73,16 @@ public class CustomerDAO {
    }
 
    public boolean isUsernameOrEmailAddressTaken(String username, String emailAddress) {
-       String query = "SELECT * FROM Customers WHERE username = ? OR emailAddress = ?";
+	   String query = """
+		        SELECT 1 FROM Customers WHERE username = ? OR emailAddress = ?
+		        UNION
+		        SELECT 1 FROM Employees WHERE username = ?
+		    """;
        try (Connection conn = DatabaseConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
            stmt.setString(1, username);
            stmt.setString(2, emailAddress);
+           stmt.setString(3, username);
            ResultSet rs = stmt.executeQuery();
            return rs.next();
        } catch (SQLException e) {

@@ -13,15 +13,25 @@
 
     String action = request.getParameter("action");
     if ("add".equals(action)) {
-        String username = request.getParameter("username");
+    	String username = request.getParameter("username");
         String password = request.getParameter("password");
         String fname = request.getParameter("fname");
         String lname = request.getParameter("lname");
         String ssn = request.getParameter("ssn");
-        Employee newEmployee = new Employee(0, fname, lname, username, password, false, ssn);
-        boolean success = employeeDAO.addCustomerRep(newEmployee);
-        request.setAttribute("message", success ? "Employee added successfully." : "Failed to add employee.");
-        response.sendRedirect("manageEmployees.jsp"); // Redirect to refresh the table
+
+        boolean usernameTaken = employeeDAO.isUsernameTaken(username);
+        boolean ssnTaken = employeeDAO.isSSNTaken(ssn);
+
+        if (usernameTaken) {
+            request.setAttribute("message", "Error: Username is already taken.");
+        } else if (ssnTaken) {
+            request.setAttribute("message", "Error: SSN is already in use.");
+        } else {
+            Employee newEmployee = new Employee(0, fname, lname, username, password, false, ssn);
+            boolean success = employeeDAO.addCustomerRep(newEmployee);
+            request.setAttribute("message", success ? "Employee added successfully." : "Failed to add employee.");
+            response.sendRedirect("manageEmployees.jsp"); // Redirect to refresh the table
+        }
     } else if ("delete".equals(action)) {
     	int employeeID = Integer.parseInt(request.getParameter("employeeID"));
         boolean success = employeeDAO.deleteCustomerRep(employeeID);
@@ -56,15 +66,15 @@
         <!-- Page Content -->
         <h2>Manage Employees</h2>
 
-        <!-- Message Display -->
+       <!-- Display Toaster -->
         <% 
             String message = (String) request.getAttribute("message");
-            if (message != null) {
         %>
-            <p class="success-message"><%= message %></p>
-        <% 
-            } 
-        %>
+        <% if (message != null) { %>
+            <div class="toaster <%= message.contains("successfully") ? "success" : "error" %>">
+                <%= message %>
+            </div>
+        <% } %>
 
         <!-- Add New Employee Form -->
         <h3>Add New Employee</h3>
@@ -78,7 +88,7 @@
             <input type="text" id="username" name="username" required><br>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required><br>
-            <label for="ssn">SSN:</label>
+            <label for="ssn">SSN (xxx-xx-xxxx):</label>
             <input type="text" id="ssn" name="ssn" required><br>
             <button type="submit" class="button">Add Employee</button>
         </form>
