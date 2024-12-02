@@ -676,6 +676,7 @@ body {
 }
 
 /* Dropdown container form styling */
+
 .customer-service-container .search-form {
     display: flex;
     flex-wrap: wrap; /* Make it responsive */
@@ -694,6 +695,8 @@ body {
 }
 
 /* Style the select dropdowns */
+.customer-service-container form input[type="text"],
+.customer-service-container form input[type="number"],
 .customer-service-container select {
     appearance: none; /* Remove default browser styling */
     background-color: #f9f9f9; /* Light background */
@@ -705,6 +708,18 @@ body {
     width: auto; /* Adjust width to content */
     margin: 0 10px; /* Spacing between inputs */
     transition: border-color 0.3s ease;
+}
+
+/* Style the submit button */
+.customer-service-container button[type="submit"] {
+    background-color: #28a745; /* Green button */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease;
 }
 
 .search-form label {
