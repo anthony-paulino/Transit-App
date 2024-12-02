@@ -669,14 +669,14 @@ body {
 }
 
 /* Dropdown focus/hover effect */
-.customer-schedule-container select:hover,
-.customer-schedule-container select:focus {
+.customer-service-container select:hover,
+.customer-service-container select:focus {
     border-color: #3498db; /* Change border color on hover/focus */
     outline: none; /* Remove focus outline */
 }
 
 /* Dropdown container form styling */
-.customer-schedule-container .search-form {
+.customer-service-container .search-form {
     display: flex;
     flex-wrap: wrap; /* Make it responsive */
     align-items: center; /* Center align items vertically */
@@ -686,7 +686,7 @@ body {
 }
 
 /* Style the label */
-.customer-schedule-container label {
+.customer-service-container label {
     font-weight: bold;
     margin-right: 5px;
     font-size: 14px;
@@ -694,7 +694,7 @@ body {
 }
 
 /* Style the select dropdowns */
-.customer-schedule-container select {
+.customer-service-container select {
     appearance: none; /* Remove default browser styling */
     background-color: #f9f9f9; /* Light background */
     color: #333; /* Text color */
