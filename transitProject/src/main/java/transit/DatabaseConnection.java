@@ -124,7 +124,7 @@ public class DatabaseConnection {
 					        3000 AS scheduleID, 3 AS transitID, 1006 AS trainID, 8 AS originID, 13 AS destinationID,
 					        CONCAT(CURDATE(), ' 05:30:00') AS departureDateTime, CONCAT(CURDATE(), ' 07:10:00') AS arrivalDateTime, 'forward' AS tripDirection
 					    UNION ALL
-					    SELECT 3001, 3, 1006, 13, 8, CONCAT(CURDATE(), ' 07:30:00'), CONCAT(CURDATE(), ' 09:10:00'), 'return'
+					    SELECT 3001, 3, 1006, 13, 8, CONCAT(CURDATE(), ' 7:30:00'), CONCAT(CURDATE(), ' 9:10:00'), 'return'
 					    UNION ALL
 					    SELECT 3002, 3, 1007, 8, 13, CONCAT(CURDATE(), ' 10:00:00'), CONCAT(CURDATE(), ' 11:40:00'), 'forward'
 					    UNION ALL
@@ -133,6 +133,16 @@ public class DatabaseConnection {
 					    SELECT 3004, 3, 1008, 8, 13, CONCAT(CURDATE(), ' 15:00:00'), CONCAT(CURDATE(), ' 17:40:00'), 'forward'
 					    UNION ALL
 					    SELECT 3005, 3, 1008, 13, 8, CONCAT(CURDATE(), ' 18:20:00'), CONCAT(CURDATE(), ' 20:00:00'), 'return'
+					   	UNION ALL
+					    SELECT
+					        4000 AS scheduleID, 4 AS transitID, 1009 AS trainID, 1 AS originID, 3 AS destinationID,
+					        CONCAT(CURDATE(), ' 07:00:00') AS departureDateTime, CONCAT(CURDATE(), ' 07:40:00') AS arrivalDateTime, 'forward' AS tripDirection
+					    UNION ALL
+					    SELECT 4001, 4, 1009, 3, 1, CONCAT(CURDATE(), ' 7:50:00'), CONCAT(CURDATE(), ' 8:30:00'), 'return'
+					    UNION ALL
+					    SELECT 4002, 4, 1010, 1, 3, CONCAT(CURDATE(), ' 9:00:00'), CONCAT(CURDATE(),' 9:40:00'), 'forward'
+					    UNION ALL
+					    SELECT 4003, 4, 1010, 3, 1, CONCAT(CURDATE(), ' 10:00:00'), CONCAT(CURDATE(), ' 10:40:00'), 'return'
 					) base_schedule
 					-- Generate day offsets for 14 days starting from the current date
 					CROSS JOIN (
@@ -376,6 +386,34 @@ public class DatabaseConnection {
 							SELECT 3005, 9, 5, CONCAT(CURDATE(), ' 19:40:00'), CONCAT(CURDATE(), ' 19:45:00')
 							UNION ALL
 							SELECT 3005, 8, 6, CONCAT(CURDATE(), ' 20:00:00'), NULL
+							
+							UNION ALL
+							SELECT 4000, 1, 1, NULL, CONCAT(CURDATE(), ' 7:00:00')
+							UNION ALL
+							SELECT 4000, 2, 2, CONCAT(CURDATE(), ' 7:20:00'), CONCAT(CURDATE(), ' 7:25:00')
+							UNION ALL
+							SELECT 4000, 3, 3, CONCAT(CURDATE(), ' 7:40:00'), NULL
+							
+							UNION ALL
+							SELECT 4001, 1, 1, NULL, CONCAT(CURDATE(), ' 7:50:00')
+							UNION ALL
+							SELECT 4001, 2, 1, CONCAT(CURDATE(), ' 8:10:00'), CONCAT(CURDATE(), ' 8:15:00')
+							UNION ALL
+							SELECT 4001, 3, 3, CONCAT(CURDATE(), ' 8:30:00'), NULL
+						    
+						    UNION ALL
+							SELECT 4002, 1, 1, NULL, CONCAT(CURDATE(), ' 9:00:00')
+							UNION ALL
+							SELECT 4002, 2, 1, CONCAT(CURDATE(), ' 9:20:00'), CONCAT(CURDATE(), ' 9:25:00')
+							UNION ALL
+							SELECT 4002, 3, 3, CONCAT(CURDATE(), ' 9:40:00'), NULL
+						    
+							UNION ALL
+							SELECT 4003, 1, 1, NULL, CONCAT(CURDATE(), ' 10:00:00')
+							UNION ALL
+							SELECT 4003, 2, 1, CONCAT(CURDATE(), ' 10:20:00'), CONCAT(CURDATE(), ' 10:25:00')
+							UNION ALL
+							SELECT 4003, 3, 3, CONCAT(CURDATE(), ' 10:40:00'), NULL
 						) base_schedule
 						-- Generate valid days for 14 days starting from the current date
 						CROSS JOIN (
