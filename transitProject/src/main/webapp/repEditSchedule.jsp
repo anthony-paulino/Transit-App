@@ -61,6 +61,10 @@
 
                 boolean stopsUpdated = stopsAtDAO.updateStops(scheduleID, updatedStops);
                 message = stopsUpdated ? "Train Schedule updated successfully." : "Failed to update stops.";
+
+                // Refetch the updated schedule and stops
+                schedule = trainScheduleDAO.getTrainSchedule(scheduleID);
+                stops = stopsAtDAO.getStopsByScheduleID(scheduleID);
             } else {
                 message = "Failed to update Train Schedule.";
             }
@@ -86,7 +90,7 @@
         	String referer = request.getHeader("referer");
             if (referer != null && !referer.isEmpty()) {
 		    %>
-		        <a href="<%= referer %>" class="back-to-schedule">Back to Schedule</a>
+		        <a href="repModifySchedules.jsp" class="back-to-schedule">Back to Schedule</a>
 		    <%
 		        }
 		    %>
@@ -190,6 +194,10 @@
         document.addEventListener("DOMContentLoaded", () => {
             flatpickr("#departureDateTime", { enableTime: true, dateFormat: "Y-m-d H:i:S" });
             flatpickr("#arrivalDateTime", { enableTime: true, dateFormat: "Y-m-d H:i:S" });
+         	// Dynamically initialize Flatpickr for intermediate stops
+            document.querySelectorAll("input[name^='arrivalTimes'], input[name^='departureTimes']").forEach(input => {
+                flatpickr(input, { enableTime: true, dateFormat: "Y-m-d H:i:S" });
+            });
         });
     </script>
 </body>

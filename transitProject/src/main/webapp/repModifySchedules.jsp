@@ -32,9 +32,13 @@
     String message = null;
 
     if ("delete".equals(action)) {
+    	java.sql.Date sqlDate = java.sql.Date.valueOf(selectedDate);
         int scheduleID = Integer.parseInt(request.getParameter("scheduleID"));
         boolean success = trainScheduleDAO.deleteTrainSchedule(scheduleID);
+        trainScheduleDAO.getAllUnreservedTrainSchedules(sqlDate);
         message = success ? "Train Schedule deleted successfully." : "Failed to delete Train Schedule.";
+        response.sendRedirect("repModifySchedules.jsp");
+        
     }
 
     SimpleDateFormat f = new SimpleDateFormat("EEEE, MMMM d, yyyy - h:mm a");

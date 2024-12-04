@@ -17,7 +17,7 @@
     String selectedItem = request.getParameter("selectedItem");
 
     // Data for dropdowns
-    List<Object[]> customerList = customerDAO.getAllCustomers();
+    List<String> customerList = customerDAO.getAllCustomerNames();
     List<String> transitLines = transitLineDAO.getAllTransitLineNames();
 
     // Reservations
@@ -60,9 +60,9 @@
                 <label for="selectedItem">Select Customer:</label>
                 <select name="selectedItem" id="selectedItem" required>
                     <option value="">-- Select Customer --</option>
-                    <% for (Object[] customer : customerList) { %>
-                        <option value="<%= customer[2] + " " + customer[3] %>" <%= selectedItem != null && selectedItem.equals(customer[2] + " " + customer[3]) ? "selected" : "" %>>
-                            <%= customer[2] + " " + customer[3] %>
+                    <% for (String customer : customerList) { %>
+                        <option value="<%= customer %>" <%= selectedItem != null && selectedItem.equals(customer) ? "selected" : "" %>>
+                            <%= customer %>
                         </option>
                     <% } %>
                 </select>

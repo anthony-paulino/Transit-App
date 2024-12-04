@@ -38,14 +38,13 @@
                 // Check if the depatureTime is before currentTime (curret time passed depatureTime)
                 if (departureTime.before(now)) {
                     // If so, check if the arrivalTime is before CurrentTime (curret time passed arrivalTime)
-                	if(arrivalTime.before(now))
-                    isPast = true;
-                    break;
-                }
-                // depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
-                else{
+                	if(arrivalTime.before(now)){
+	                    isPast = true;
+	                    break;
+                	}             
+                	// depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
                 	isCurrent = true;
-                	
+                	break;          	
                 }
             } else if ("oneWay".equals(ticket.getTripType())) {
                 // Check departure time for one-way tickets
@@ -55,14 +54,13 @@
                 // Check if the depatureTime is before currentTime (curret time passed depatureTime)
                 if (departureTime.before(now)) {
                     // If so, check if the arrivalTime is before CurrentTime (curret time passed arrivalTime)
-                	if(arrivalTime.before(now))
-                    isPast = true;
-                    break;
-                }
-                // depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
-                else{
+                	if(arrivalTime.before(now)){
+	                    isPast = true;
+	                    break;
+                	}
+                	// depatureTime is before currentTime but not before arrivalTime, therefore its a current reservation
                 	isCurrent = true;
-                	
+                	break;    
                 }
            }
         }
@@ -96,7 +94,7 @@
             <p>View, open, and cancel your reservations below:</p>
             <button onclick="showReservations('all')" >All Reservations</button>
             <button onclick="showReservations('future')" >Future Reservations</button>
-            <button onclick="showReservations('ongoing')" >Current Reservations</button>
+            <button onclick="showReservations('current')" >On-going Reservations</button>
             <button onclick="showReservations('past')" >Past Reservations</button>
 
             <% if (reservations.isEmpty()) { %>
@@ -225,9 +223,11 @@
         function showReservations(type) {
             const allTable = document.getElementById('all-reservations');
             const currentTable = document.getElementById('current-reservations');
+            const futureTable = document.getElementById('future-reservations');
             const pastTable = document.getElementById('past-reservations');
             allTable.style.display = type === 'all' ? 'table' : 'none';
             currentTable.style.display = type === 'current' ? 'table' : 'none';
+            futureTable.style.display = type === 'future' ? 'table' : 'none';
             pastTable.style.display = type === 'past' ? 'table' : 'none';
         }
 

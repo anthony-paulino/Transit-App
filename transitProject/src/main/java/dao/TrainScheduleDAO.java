@@ -243,19 +243,17 @@ public class TrainScheduleDAO {
         return schedules;
     }
     
-    public List<TrainSchedule> searchSchedulesByStationWithFares(int stationID, Date travelDate) {
+    public List<TrainSchedule> searchSchedulesByStationWithFares(int stationID) {
         List<TrainSchedule> schedules = new ArrayList<>();
         String query = "SELECT DISTINCT ts.* FROM Train_Schedules ts "
                      + "JOIN Stops_At sa ON ts.scheduleID = sa.scheduleID "
                      + "WHERE sa.stationID = ? "
-                     + "AND DATE(ts.departureDateTime) = ? "
                      + "ORDER BY ts.departureDateTime";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, stationID);
-            stmt.setDate(2, new java.sql.Date(travelDate.getTime()));
 
             ResultSet rs = stmt.executeQuery();
 
@@ -300,6 +298,7 @@ public class TrainScheduleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.print(schedules.size());
         return schedules;
     }
 

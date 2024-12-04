@@ -105,7 +105,7 @@
                 String referer = request.getHeader("referer");
                 if (referer != null && !referer.isEmpty()) {
             %>
-                <a href="<%= referer %>" class="back-to-schedule">Back to Employees</a>
+                <a href="manageEmployees.jsp" class="back-to-schedule">Back to Employees</a>
             <%
                 }
             %>

@@ -29,7 +29,6 @@
 </head>
 <body>
 <div class="rep-customer-reservations-container">
-    <div class="dashboard-container">
         <!-- Navbar -->
         <div class="navbar">
             <a href="repDashboard.jsp">Back to Dashboard</a>
@@ -77,7 +76,6 @@
             <% } %>
         </div>
     </div>
-</div>
 </body>
 </html>
 

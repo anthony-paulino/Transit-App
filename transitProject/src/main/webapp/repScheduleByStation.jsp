@@ -16,16 +16,16 @@
 
    // Form parameters
    String stationIDParam = request.getParameter("station");
-   String travelDateParam = request.getParameter("travelDate");
 
    List<TrainSchedule> schedules = new ArrayList<>();
 
    // Fetch schedules if search criteria are provided
-   if (stationIDParam != null && travelDateParam != null) {
+   if (stationIDParam != null) {
        int stationID = Integer.parseInt(stationIDParam);
-       Date travelDate = java.sql.Date.valueOf(travelDateParam);
 
-       schedules = scheduleDAO.searchSchedulesByStationWithFares(stationID, travelDate);
+       schedules = scheduleDAO.searchSchedulesByStationWithFares(stationID);
+       System.out.print(schedules.size());
+
    }
 %>
 <!DOCTYPE html>
@@ -47,6 +47,7 @@
            <form action="repScheduleByStation.jsp" method="get" class="search-form">
 			    <label for="station">Station:</label>
 			    <select name="station" id="station" required>
+			    	<option value="">Select a station...</option>
 			        <% for (Station station : stationDAO.getAllStations()) { %>
 			            <option value="<%= station.getStationID() %>" 
 			                <%= stationIDParam != null && stationIDParam.equals(String.valueOf(station.getStationID())) ? "selected" : "" %>>
@@ -54,10 +55,6 @@
 			            </option>
 			        <% } %>
 			    </select>
-			
-			    <label for="travelDate">Travel Date:</label>
-			    <input type="date" id="travelDate" name="travelDate" 
-			           value="<%= travelDateParam != null ? travelDateParam : "" %>" required>
 			
 			    <button type="submit">Search</button>
 			</form>
