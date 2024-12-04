@@ -63,7 +63,7 @@ public class DatabaseConnection {
             }
 
             // Decide whether to run the script
-            if (lastExecutionDate == null || lastExecutionDate.isBefore(today.minusDays(2))) {
+            if (lastExecutionDate == null || lastExecutionDate.isBefore(today)) {
                 System.out.println("Executing SQL script...");
                 executeSqlScript(connection);
 
