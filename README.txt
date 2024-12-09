@@ -24,7 +24,7 @@ Application Features
 Browsing and Searching:
 - When you launch the app you can browse schedules for the current day and the next two days.
 - At the initial launch, the app generates schedules for the current day and the subsequent two days.
--  Daily trips are created for each transit line, which may take some time to load.
+-  Daily trips are created for each transit line, which may make the browsing and searching functionalities for train schedule to take some time to load.
 
 Reservations: 
 - You can browse and search for trips to reserve.
