@@ -56,7 +56,7 @@ This project implements an **Online Railway Booking System** using a **MySQL dat
 
 ### Steps
 1. **Run SQL Dump**:
-   - Import the provided `.sql` dump file into **MySQL Workbench** to set up the database schema and initial data.
+   - Import the provided `FinalTransitDatbase.sql` dump file into **MySQL Workbench** to set up the database schema and initial data.
    
 2. **Configure Database Connection**:
    - Navigate to `Transit-App\transitProject\src\main\java\transit\DatabaseConnection.java`.

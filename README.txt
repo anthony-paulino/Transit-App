@@ -3,7 +3,7 @@ Transit App - README
 Setting Up the Project
 
 1.Database Initialization:
-- Run the provided .sql dump file in SQL Workbench to set up the database structure and populate it with initial data.
+- Run the provided FinalTransitDatbase.sql file in SQL Workbench to set up the database structure and populate it with initial data.
 
 2. Database Connection:
 - Navigate to: path_to_project\Transit-App\transitProject\src\main\java\transit\DatabaseConnection.java
